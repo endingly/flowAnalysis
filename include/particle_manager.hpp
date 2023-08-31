@@ -8,7 +8,7 @@ namespace flowAnalysis
 
 class particle_manager
 {
-  private:
+  public:
     std::map<std::string, Atom> atom;
     std::map<std::string, Molecule> molecule;
     std::map<std::string, Ion> ion;                                  
