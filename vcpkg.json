@@ -1,5 +1,5 @@
 {
-  "name": "cpp20-demo",
+  "name": "flow-analysis",
   "version": "0.0.1",
   "dependencies": [
     "backward-cpp",

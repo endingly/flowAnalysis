@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26.0)
 
-project(cpp20_demo VERSION 0.1.0 LANGUAGES CUDA CXX)
+project(flowAnalysis VERSION 0.1.0 LANGUAGES CUDA CXX)
 
 # project settings
 set(CMAKE_CXX_STANDARD 20)
@@ -27,10 +27,10 @@ endif()
 
 file(GLOB_RECURSE SRC "src/*.cpp")
 
-add_executable(cpp20_demo ${SRC})
-target_include_directories(cpp20_demo PUBLIC include)
+add_executable(${PROJECT_NAME} ${SRC})
+target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(
-    cpp20_demo PUBLIC 
+    ${PROJECT_NAME} PUBLIC 
     fmt::fmt
     $<$<BOOL:${ENBALE_STACK_TRACE}>:Backward::Backward>
     Eigen3::Eigen
@@ -42,7 +42,7 @@ target_link_libraries(
 add_subdirectory(sub_extension/parallel_computing)
 
 if(ENBALE_STACK_TRACE)
-    target_compile_definitions(cpp20_demo PUBLIC ENABLE_STACK_TRACE)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ENABLE_STACK_TRACE)
 endif()
 
 if(ENABLE_TEST)
