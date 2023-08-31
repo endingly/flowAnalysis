@@ -22,6 +22,7 @@ struct Atom
     Matrix Jx, Jy;
 
     Atom(std::string name, ExciteState state, std::string exciteStateName);
+    Atom();
     ~Atom();
 };
 
@@ -36,7 +37,8 @@ struct Ion
     Matrix Jdx, Jdy;  // 电流密度在空间上的步进
     Matrix N;         // 摩尔的量
 
-    Ion(/* args */);
+    Ion(std::string name, int polarity);
+    Ion();
     ~Ion();
 };
 
@@ -53,7 +55,8 @@ struct Molecule
     Matrix Jdx, Jdy;
     Matrix N;
 
-    Molecule(/* args */);
+    Molecule(std::string name, int polarity, ExciteState state, std::string exciteStateName);
+    Molecule();
     ~Molecule();
 };
 
