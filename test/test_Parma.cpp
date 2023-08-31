@@ -3,6 +3,7 @@
 #include <fmt/core.h>
 #include <fstream>
 #include <gtest/gtest.h>
+#include "log.hpp"
 namespace fs = std::filesystem;
 using std::string;
 
@@ -29,6 +30,7 @@ TEST(Parma, ToString)
 
 TEST(Parma, ToFile)
 {
+    flowAnalysis::InitLogSystem();
     flowAnalysis::Parma p{
         .xmax = 1,
         .ymax = 1,

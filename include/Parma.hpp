@@ -33,5 +33,10 @@ struct Parma
     /// @param path 文件名
     /// @return 
     bool ToFile(std::string path);
+
+    /// @brief 从 json 文件中读取并反序列化
+    /// @param path 文件路径
+    /// @return 序列化结果
+    static std::unique_ptr<Parma> FromFile(std::string path);
 };
 } // namespace flowAnalysis

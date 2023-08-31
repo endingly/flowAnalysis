@@ -10,7 +10,7 @@ if(MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS YES)
 endif()
 
-option(ENBALE_STACK_TRACE "enable stack trace" ON)
+option(ENBALE_STACK_TRACE "enable stack trace" OFF)
 option(ENABLE_TEST "enable test" ON)
 
 # package settings

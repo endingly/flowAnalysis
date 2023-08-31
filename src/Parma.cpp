@@ -1,4 +1,5 @@
 #include "Parma.hpp"
+#include <fmt/core.h>
 #include <fstream>
 #include <glog/logging.h>
 #include <nlohmann/json.hpp>
@@ -45,9 +46,9 @@ std::unique_ptr<Parma> Parma::Parse(string jsonString)
 }
 
 bool Parma::ToFile(string path)
-{   
+{
     fs::path p(path);
-    
+
     auto dir = p.remove_filename();
     if (!fs::exists(dir))
     {
@@ -65,5 +66,25 @@ bool Parma::ToFile(string path)
     {
         LOG(ERROR) << "Unable to open file for writing\n";
         return false;
+    }
+}
+
+std::unique_ptr<Parma> FromFile(std::string path)
+{
+    std::ifstream inputFile(path);
+    if (inputFile.is_open())
+    {
+        // 读取文件的所有内容
+        std::string strJson((std::istreambuf_iterator<char>(inputFile)), std::istreambuf_iterator<char>());
+        auto p = flowAnalysis::Parma::Parse(strJson);
+        fmt::print("jsonString = {}\n", p->ToString());
+        inputFile.close(); // 关闭文件
+        LOG(INFO) << "JSON data has been read from " << path << "\n";
+        return std::move(p);
+    }
+    else
+    {
+        LOG(ERROR) << "JSON data has been read from " << path << "\n";
+        return nullptr;
     }
 }
