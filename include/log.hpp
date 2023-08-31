@@ -1,0 +1,5 @@
+
+namespace flowAnalysis
+{
+void InitLogSystem();
+}

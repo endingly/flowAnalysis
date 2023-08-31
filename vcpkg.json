@@ -1,0 +1,13 @@
+{
+  "name": "cpp20-demo",
+  "version": "0.0.1",
+  "dependencies": [
+    "backward-cpp",
+    "gtest",
+    "fmt",
+    "eigen3",
+    "cuda",
+    "nlohmann-json",
+    "glog"
+  ]
+}
