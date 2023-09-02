@@ -1,10 +1,10 @@
 #pragma once
-#include <string>
 #include <memory>
+#include <string>
 
 namespace flowAnalysis
 {
-struct Parma
+struct parma
 {
     float xmax;
     float ymax;
@@ -27,16 +27,16 @@ struct Parma
     /// @brief 从 json 字符串反序列化
     /// @param jsonString 指定 json 字符串
     /// @return 在堆上分配的结果结构体
-    static std::unique_ptr<Parma> Parse(std::string jsonString);
+    static std::unique_ptr<parma> Parse(std::string jsonString);
 
     /// @brief 将 json 字符串写入文件
     /// @param path 文件名
-    /// @return 
+    /// @return
     bool ToFile(std::string path);
 
     /// @brief 从 json 文件中读取并反序列化
     /// @param path 文件路径
     /// @return 序列化结果
-    static std::unique_ptr<Parma> FromFile(std::string path);
+    static std::unique_ptr<parma> FromFile(std::string path);
 };
 } // namespace flowAnalysis

@@ -1,9 +1,5 @@
-#include "Fluid.hpp"
+#include "fluid.hpp"
 
-flowAnalysis::Fluid::Fluid(/* args */)
-{
-}
+flowAnalysis::fluid::fluid(/* args */) = default;
 
-flowAnalysis::Fluid::~Fluid()
-{
-}
+flowAnalysis::fluid::~fluid() = default;

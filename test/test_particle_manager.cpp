@@ -1,4 +1,3 @@
-#include "particle.hpp"
 #include "particle_manager.hpp"
 #include <filesystem>
 #include <fstream>
