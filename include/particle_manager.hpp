@@ -1,7 +1,7 @@
 #pragma once
-#include <map>
-#include <string>
 #include "particle.hpp"
+#include <string>
+#include <unordered_set>
 
 namespace flowAnalysis
 {
@@ -9,13 +9,16 @@ namespace flowAnalysis
 class particle_manager
 {
   public:
-    std::map<std::string, Atom> atom;
-    std::map<std::string, Molecule> molecule;
-    std::map<std::string, Ion> ion;                                  
+    std::unordered_set<Atom>     atom;
+    std::unordered_set<Molecule> molecule;
+    std::unordered_set<Ion>      ion;
     /* data */
   public:
     particle_manager();
     ~particle_manager();
 };
+
+void to_json(nlohmann::json& j, const particle_manager& pm);
+void from_json(const nlohmann::json& j, particle_manager& pm);
 
 } // namespace flowAnalysis

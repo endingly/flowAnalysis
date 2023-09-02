@@ -1,40 +1,27 @@
 #include "particle_manager.hpp"
-#include <filesystem>
-#include <fstream>
 #include <nlohmann/json.hpp>
 #include <string>
 
-namespace fs = std::filesystem;
+using flowAnalysis::particle_manager;
 
-flowAnalysis::particle_manager::particle_manager()
+particle_manager::particle_manager()
 {
-    fs::path p = fs::current_path().append("input").append("particle.json");
-    std::ifstream i(p.string().c_str());
-    nlohmann::json j;
-    i >> j;
-    for (auto &element : j["atom"])
-    {
-        std::string name = element["name"];
-        ExciteState state = element["state"];
-        std::string exciteStateName = element["exciteStateName"];
-        atom[name] = Atom(name, state, exciteStateName);
-    }
-    for (auto &element : j["molecule"])
-    {
-        std::string name = element["name"];
-        int polarity = element["polarity"];
-        ExciteState state = element["state"];
-        std::string exciteStateName = element["exciteStateName"];
-        molecule[name] = Molecule(name, polarity, state, exciteStateName);
-    }
-    for (auto &element : j["Ion"])
-    {
-        std::string name = element["name"];
-        int polarity = element["polarity"];
-        ion[name] = Ion(name, polarity);
-    }
 }
 
-flowAnalysis::particle_manager::~particle_manager()
+particle_manager::~particle_manager()
 {
+}
+
+void flowAnalysis::to_json(nlohmann::json& j, const particle_manager& pm)
+{
+    j["atom"]     = pm.atom;
+    j["molecule"] = pm.molecule;
+    j["ion"]      = pm.ion;
+}
+
+void flowAnalysis::from_json(const nlohmann::json& j, particle_manager& pm)
+{
+    j.at("atom").get_to(pm.atom);
+    j.at("molecule").get_to(pm.molecule);
+    j.at("ion").get_to(pm.ion);
 }
