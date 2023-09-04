@@ -85,17 +85,7 @@ class Molecule
 
     [[nodiscard]] size_t hash() const;
 };
-
-/// @brief 从 json 文件中读取粒子信息
-void from_json(const nlohmann::json& j, Atom& p);
-void from_json(const nlohmann::json& j, Ion& p);
-void from_json(const nlohmann::json& j, Molecule& p);
-/// @brief 将粒子信息写入 json 文件
-void to_json(nlohmann::json& j, const Atom& p);
-void to_json(nlohmann::json& j, const Ion& p);
-void to_json(nlohmann::json& j, const Molecule& p);
-
-} // namespace flowAnalysis
+} 
 
 // -------------------------------------
 // 为了让自定义的类型可以作为 std::unordered_map 的 key
@@ -120,4 +110,64 @@ struct hash<T>
     }
 };
 
-} // namespace std
+} 
+
+// 对于拥有移动构造的类，需要另外特化
+namespace nlohmann
+{
+template <>
+struct adl_serializer<flowAnalysis::Atom>
+{
+    static flowAnalysis::Atom from_json(const json& j)
+    {
+        auto* p            = new flowAnalysis::Atom();
+        p->name            = j.at("name").get<std::string>();
+        p->state           = j.at("state").get<flowAnalysis::ExciteState>();
+        p->exciteStateName = j.at("exciteStateName").get<std::string>();
+        return std::move(*p);
+    }
+
+    static void to_json(json& j, flowAnalysis::Atom p)
+    {
+        j = nlohmann::json{{"name", p.name}, {"state", p.state}, {"exciteStateName", p.exciteStateName}};
+    }
+};
+
+template <>
+struct adl_serializer<flowAnalysis::Ion>
+{
+    static flowAnalysis::Ion from_json(const json& j)
+    {
+        auto* p     = new flowAnalysis::Ion();
+        p->name     = j.at("name").get<std::string>();
+        p->polarity = j.at("polarity").get<int>();
+        return std::move(*p);
+    }
+
+    static void to_json(json& j, flowAnalysis::Ion p)
+    {
+        j = nlohmann::json{{"name", p.name}, {"polarity", p.polarity}};
+    }
+};
+
+template <>
+struct adl_serializer<flowAnalysis::Molecule>
+{
+    static flowAnalysis::Molecule from_json(const json& j)
+    {
+        auto* p            = new flowAnalysis::Molecule();
+        p->name            = j.at("name").get<std::string>();
+        p->polarity        = j.at("polarity").get<int>();
+        p->state           = j.at("state").get<flowAnalysis::ExciteState>();
+        p->exciteStateName = j.at("exciteStateName").get<std::string>();
+        return std::move(*p);
+    }
+
+    static void to_json(json& j, flowAnalysis::Molecule p)
+    {
+        j = nlohmann::json{
+            {"name", p.name}, {"polarity", p.polarity}, {"state", p.state}, {"exciteStateName", p.exciteStateName}};
+    }
+};
+
+}

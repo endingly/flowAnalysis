@@ -12,8 +12,7 @@ class particle_manager
     std::unordered_set<Atom>     atom;
     std::unordered_set<Molecule> molecule;
     std::unordered_set<Ion>      ion;
-    /* data */
-  public:
+
     particle_manager();
     ~particle_manager();
 };

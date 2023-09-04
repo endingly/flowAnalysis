@@ -289,59 +289,6 @@ Molecule::Molecule(string name, int polarity, ExciteState state, string exciteSt
 
 Molecule::~Molecule() = default;
 
-void from_json(const nlohmann::json& j, Atom& p)
-{
-    p.name            = j.at("name").get<std::string>();
-    p.state           = j.at("state").get<ExciteState>();
-    p.exciteStateName = j.at("exciteStateName").get<std::string>();
-
-    p.N  = Matrix::Zero();
-    p.Dx = Matrix::Zero();
-    p.Dy = Matrix::Zero();
-    p.Zx = Matrix::Zero();
-    p.Zy = Matrix::Zero();
-    p.Jx = Matrix::Zero();
-    p.Jy = Matrix::Zero();
-}
-
-void from_json(const nlohmann::json& j, Ion& p)
-{
-    p.name     = j.at("name").get<std::string>();
-    p.polarity = j.at("polarity").get<int>();
-
-    p.ux  = Matrix::Zero();
-    p.uy  = Matrix::Zero();
-    p.Jx  = Matrix::Zero();
-    p.Jy  = Matrix::Zero();
-    p.Dx  = Matrix::Zero();
-    p.Dy  = Matrix::Zero();
-    p.Zx  = Matrix::Zero();
-    p.Zy  = Matrix::Zero();
-    p.Jdx = Matrix::Zero();
-    p.Jdy = Matrix::Zero();
-    p.N   = Matrix::Zero();
-}
-
-void from_json(const nlohmann::json& j, Molecule& p)
-{
-    p.name            = j.at("name").get<std::string>();
-    p.polarity        = j.at("polarity").get<int>();
-    p.state           = j.at("state").get<ExciteState>();
-    p.exciteStateName = j.at("exciteStateName").get<std::string>();
-
-    p.ux  = Matrix::Zero();
-    p.uy  = Matrix::Zero();
-    p.Jx  = Matrix::Zero();
-    p.Jy  = Matrix::Zero();
-    p.Dx  = Matrix::Zero();
-    p.Dy  = Matrix::Zero();
-    p.Zx  = Matrix::Zero();
-    p.Zy  = Matrix::Zero();
-    p.Jdx = Matrix::Zero();
-    p.Jdy = Matrix::Zero();
-    p.N   = Matrix::Zero();
-}
-
 size_t Molecule::hash() const
 {
     return std::hash<std::string>()(name) ^ std::hash<int>()(polarity) ^ std::hash<int>()((int)state) ^
@@ -443,19 +390,3 @@ Molecule& Molecule::operator=(Molecule&& other) noexcept
     this->N   = std::move(other.N);
     return *this;
 }
-
-/// clang-format off
-void to_json(nlohmann::json& j, const Atom& p)
-{
-    j = nlohmann::json{{"name", p.name}, {"state", p.state}, {"exciteStateName", p.exciteStateName}};
-}
-void to_json(nlohmann::json& j, const Ion& p)
-{
-    j = nlohmann::json{{"name", p.name}, {"polarity", p.polarity}};
-}
-void to_json(nlohmann::json& j, const Molecule& p)
-{
-    j = nlohmann::json{
-        {"name", p.name}, {"polarity", p.polarity}, {"state", p.state}, {"exciteStateName", p.exciteStateName}};
-}
-// clang-format on
