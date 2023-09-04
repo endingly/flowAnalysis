@@ -1,4 +1,4 @@
-#include "Parma.hpp"
+#include "parma.hpp"
 #include <filesystem>
 #include <fmt/core.h>
 #include <fstream>
@@ -7,9 +7,9 @@
 namespace fs = std::filesystem;
 using std::string;
 
-TEST(Parma, ToString)
+TEST(parma, ToString)
 {
-    flowAnalysis::Parma p{
+    flowAnalysis::parma p{
         .xmax = 1,
         .ymax = 1,
         .imax = 1,
@@ -28,10 +28,10 @@ TEST(Parma, ToString)
     fmt::print("jsonString = {}\n", jsonString);
 }
 
-TEST(Parma, ToFile)
+TEST(parma, ToFile)
 {
     flowAnalysis::InitLogSystem();
-    flowAnalysis::Parma p{
+    flowAnalysis::parma p{
         .xmax = 1,
         .ymax = 1,
         .imax = 1,
@@ -45,18 +45,18 @@ TEST(Parma, ToFile)
         .F_He = 1,
         .F_CO_2 = 1,
     };
-    fs::path path = fs::current_path().append("input").append("Parma.json");
+    fs::path path = fs::current_path().append("input").append("parma.json");
     ASSERT_TRUE(p.ToFile(path.string()));
 }
 
-TEST(Parma, Parse)
+TEST(parma, Parse)
 {
-    std::ifstream inputFile(fs::current_path().append("input").append("Parma.json").string());
+    std::ifstream inputFile(fs::current_path().append("input").append("parma.json").string());
     if (inputFile.is_open())
     {
         // 读取文件的所有内容
         std::string strJson((std::istreambuf_iterator<char>(inputFile)), std::istreambuf_iterator<char>());
-        auto p = flowAnalysis::Parma::Parse(strJson);
+        auto p = flowAnalysis::parma::Parse(strJson);
         fmt::print("jsonString = {}\n", p->ToString());
         inputFile.close(); // 关闭文件
         ASSERT_TRUE(true);

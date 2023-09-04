@@ -1,9 +1,11 @@
 #include "particle.hpp"
-#include <Parma.hpp>
 #include <string>
-using std::string;
+#include <utility>
 
-flowAnalysis::Atom::Atom()
+using std::string;
+using namespace flowAnalysis;
+
+Atom::Atom()
 {
     this->name            = "";
     this->state           = ExciteState::Ground;
@@ -18,11 +20,11 @@ flowAnalysis::Atom::Atom()
     this->Jy = Matrix::Zero();
 }
 
-flowAnalysis::Atom::Atom(std::string name, ExciteState state, std::string exciteStateName)
+Atom::Atom(std::string name, ExciteState state, std::string exciteStateName)
 {
-    this->name            = name;
+    this->name            = std::move(name);
     this->state           = state;
-    this->exciteStateName = exciteStateName;
+    this->exciteStateName = std::move(exciteStateName);
 
     this->N  = Matrix::Zero();
     this->Dx = Matrix::Zero();
@@ -33,21 +35,89 @@ flowAnalysis::Atom::Atom(std::string name, ExciteState state, std::string excite
     this->Jy = Matrix::Zero();
 }
 
-flowAnalysis::Atom::~Atom()
-{
-}
+Atom::~Atom() = default;
 
-size_t flowAnalysis::Atom::hash() const
+size_t Atom::hash() const
 {
     return std::hash<std::string>()(name) ^ std::hash<int>()((int)state) ^ std::hash<std::string>()(exciteStateName);
 }
 
-bool flowAnalysis::Atom::operator==(const Atom& other) const noexcept
+bool Atom::operator==(const Atom& other) const noexcept
 {
     return this->name == other.name && this->state == other.state && this->exciteStateName == other.exciteStateName;
 }
 
-flowAnalysis::Ion::Ion()
+Atom::Atom(const Atom& other)
+{
+    this->name            = other.name;
+    this->state           = other.state;
+    this->exciteStateName = other.exciteStateName;
+
+    this->N  = other.N;
+    this->Dx = other.Dx;
+    this->Dy = other.Dy;
+    this->Zx = other.Zx;
+    this->Zy = other.Zy;
+    this->Jx = other.Jx;
+    this->Jy = other.Jy;
+}
+
+Atom& Atom::operator=(const Atom& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->name            = other.name;
+    this->state           = other.state;
+    this->exciteStateName = other.exciteStateName;
+
+    this->N  = other.N;
+    this->Dx = other.Dx;
+    this->Dy = other.Dy;
+    this->Zx = other.Zx;
+    this->Zy = other.Zy;
+    this->Jx = other.Jx;
+    this->Jy = other.Jy;
+    return *this;
+}
+
+Atom::Atom(Atom&& other) noexcept
+{
+    this->name            = std::move(other.name);
+    this->state           = other.state;
+    this->exciteStateName = std::move(other.exciteStateName);
+
+    this->N  = std::move(other.N);
+    this->Dx = std::move(other.Dx);
+    this->Dy = std::move(other.Dy);
+    this->Zx = std::move(other.Zx);
+    this->Zy = std::move(other.Zy);
+    this->Jx = std::move(other.Jx);
+    this->Jy = std::move(other.Jy);
+}
+
+Atom& Atom::operator=(Atom&& other) noexcept
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->name            = std::move(other.name);
+    this->state           = other.state;
+    this->exciteStateName = std::move(other.exciteStateName);
+
+    this->N  = std::move(other.N);
+    this->Dx = std::move(other.Dx);
+    this->Dy = std::move(other.Dy);
+    this->Zx = std::move(other.Zx);
+    this->Zy = std::move(other.Zy);
+    this->Jx = std::move(other.Jx);
+    this->Jy = std::move(other.Jy);
+    return *this;
+}
+
+Ion::Ion()
 {
     this->name     = "";
     this->polarity = 0;
@@ -65,9 +135,9 @@ flowAnalysis::Ion::Ion()
     this->N   = Matrix::Zero();
 }
 
-flowAnalysis::Ion::Ion(string name, int polarity)
+Ion::Ion(string name, int polarity)
 {
-    this->name     = name;
+    this->name     = std::move(name);
     this->polarity = polarity;
 
     this->ux  = Matrix::Zero();
@@ -83,21 +153,101 @@ flowAnalysis::Ion::Ion(string name, int polarity)
     this->N   = Matrix::Zero();
 }
 
-flowAnalysis::Ion::~Ion()
-{
-}
+Ion::~Ion() = default;
 
-size_t flowAnalysis::Ion::hash() const
+size_t Ion::hash() const
 {
     return std::hash<std::string>()(name) ^ std::hash<int>()(polarity);
 }
 
-bool flowAnalysis::Ion::operator==(const Ion& other) const noexcept
+bool Ion::operator==(const Ion& other) const noexcept
 {
     return this->name == other.name && this->polarity == other.polarity;
 }
 
-flowAnalysis::Molecule::Molecule()
+Ion::Ion(const Ion& other)
+{
+    this->name     = other.name;
+    this->polarity = other.polarity;
+
+    this->ux  = other.ux;
+    this->uy  = other.uy;
+    this->Jx  = other.Jx;
+    this->Jy  = other.Jy;
+    this->Dx  = other.Dx;
+    this->Dy  = other.Dy;
+    this->Zx  = other.Zx;
+    this->Zy  = other.Zy;
+    this->Jdx = other.Jdx;
+    this->Jdy = other.Jdy;
+    this->N   = other.N;
+}
+
+Ion& Ion::operator=(const Ion& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->name     = other.name;
+    this->polarity = other.polarity;
+
+    this->ux  = other.ux;
+    this->uy  = other.uy;
+    this->Jx  = other.Jx;
+    this->Jy  = other.Jy;
+    this->Dx  = other.Dx;
+    this->Dy  = other.Dy;
+    this->Zx  = other.Zx;
+    this->Zy  = other.Zy;
+    this->Jdx = other.Jdx;
+    this->Jdy = other.Jdy;
+    this->N   = other.N;
+    return *this;
+}
+
+Ion::Ion(Ion&& other) noexcept
+{
+    this->name     = std::move(other.name);
+    this->polarity = other.polarity;
+
+    this->ux  = std::move(other.ux);
+    this->uy  = std::move(other.uy);
+    this->Jx  = std::move(other.Jx);
+    this->Jy  = std::move(other.Jy);
+    this->Dx  = std::move(other.Dx);
+    this->Dy  = std::move(other.Dy);
+    this->Zx  = std::move(other.Zx);
+    this->Zy  = std::move(other.Zy);
+    this->Jdx = std::move(other.Jdx);
+    this->Jdy = std::move(other.Jdy);
+    this->N   = std::move(other.N);
+}
+
+Ion& Ion::operator=(Ion&& other) noexcept
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->name     = std::move(other.name);
+    this->polarity = other.polarity;
+
+    this->ux  = std::move(other.ux);
+    this->uy  = std::move(other.uy);
+    this->Jx  = std::move(other.Jx);
+    this->Jy  = std::move(other.Jy);
+    this->Dx  = std::move(other.Dx);
+    this->Dy  = std::move(other.Dy);
+    this->Zx  = std::move(other.Zx);
+    this->Zy  = std::move(other.Zy);
+    this->Jdx = std::move(other.Jdx);
+    this->Jdy = std::move(other.Jdy);
+    this->N   = std::move(other.N);
+    return *this;
+}
+
+Molecule::Molecule()
 {
     this->name            = "";
     this->polarity        = 0;
@@ -117,12 +267,12 @@ flowAnalysis::Molecule::Molecule()
     this->N   = Matrix::Zero();
 }
 
-flowAnalysis::Molecule::Molecule(string name, int polarity, ExciteState state, string exciteStateName)
+Molecule::Molecule(string name, int polarity, ExciteState state, string exciteStateName)
 {
-    this->name            = name;
+    this->name            = std::move(name);
     this->polarity        = polarity;
     this->state           = state;
-    this->exciteStateName = exciteStateName;
+    this->exciteStateName = std::move(exciteStateName);
 
     this->ux  = Matrix::Zero();
     this->uy  = Matrix::Zero();
@@ -137,11 +287,9 @@ flowAnalysis::Molecule::Molecule(string name, int polarity, ExciteState state, s
     this->N   = Matrix::Zero();
 }
 
-flowAnalysis::Molecule::~Molecule()
-{
-}
+Molecule::~Molecule() = default;
 
-void flowAnalysis::from_json(const nlohmann::json& j, Atom& p)
+void from_json(const nlohmann::json& j, Atom& p)
 {
     p.name            = j.at("name").get<std::string>();
     p.state           = j.at("state").get<ExciteState>();
@@ -156,7 +304,7 @@ void flowAnalysis::from_json(const nlohmann::json& j, Atom& p)
     p.Jy = Matrix::Zero();
 }
 
-void flowAnalysis::from_json(const nlohmann::json& j, Ion& p)
+void from_json(const nlohmann::json& j, Ion& p)
 {
     p.name     = j.at("name").get<std::string>();
     p.polarity = j.at("polarity").get<int>();
@@ -174,7 +322,7 @@ void flowAnalysis::from_json(const nlohmann::json& j, Ion& p)
     p.N   = Matrix::Zero();
 }
 
-void flowAnalysis::from_json(const nlohmann::json& j, Molecule& p)
+void from_json(const nlohmann::json& j, Molecule& p)
 {
     p.name            = j.at("name").get<std::string>();
     p.polarity        = j.at("polarity").get<int>();
@@ -194,33 +342,120 @@ void flowAnalysis::from_json(const nlohmann::json& j, Molecule& p)
     p.N   = Matrix::Zero();
 }
 
-size_t flowAnalysis::Molecule::hash() const 
+size_t Molecule::hash() const
 {
-    return std::hash<std::string>()(name) ^ std::hash<int>()(polarity) ^ std::hash<int>()((int)state) ^ std::hash<std::string>()(exciteStateName);
+    return std::hash<std::string>()(name) ^ std::hash<int>()(polarity) ^ std::hash<int>()((int)state) ^
+           std::hash<std::string>()(exciteStateName);
 }
 
-bool flowAnalysis::Molecule::operator==(const Molecule& other) const noexcept
+bool Molecule::operator==(const Molecule& other) const noexcept
 {
-    return this->name == other.name && this->polarity == other.polarity && this->state == other.state && this->exciteStateName == other.exciteStateName;
+    return this->name == other.name && this->polarity == other.polarity && this->state == other.state &&
+           this->exciteStateName == other.exciteStateName;
+}
+
+Molecule::Molecule(const Molecule& other)
+{
+    this->name            = other.name;
+    this->polarity        = other.polarity;
+    this->state           = other.state;
+    this->exciteStateName = other.exciteStateName;
+
+    this->ux  = other.ux;
+    this->uy  = other.uy;
+    this->Jx  = other.Jx;
+    this->Jy  = other.Jy;
+    this->Dx  = other.Dx;
+    this->Dy  = other.Dy;
+    this->Zx  = other.Zx;
+    this->Zy  = other.Zy;
+    this->Jdx = other.Jdx;
+    this->Jdy = other.Jdy;
+    this->N   = other.N;
+}
+
+Molecule& Molecule::operator=(const Molecule& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->name            = other.name;
+    this->polarity        = other.polarity;
+    this->state           = other.state;
+    this->exciteStateName = other.exciteStateName;
+
+    this->ux  = other.ux;
+    this->uy  = other.uy;
+    this->Jx  = other.Jx;
+    this->Jy  = other.Jy;
+    this->Dx  = other.Dx;
+    this->Dy  = other.Dy;
+    this->Zx  = other.Zx;
+    this->Zy  = other.Zy;
+    this->Jdx = other.Jdx;
+    this->Jdy = other.Jdy;
+    this->N   = other.N;
+    return *this;
+}
+
+Molecule::Molecule(Molecule&& other) noexcept
+{
+    this->name            = std::move(other.name);
+    this->polarity        = other.polarity;
+    this->state           = other.state;
+    this->exciteStateName = std::move(other.exciteStateName);
+
+    this->ux  = std::move(other.ux);
+    this->uy  = std::move(other.uy);
+    this->Jx  = std::move(other.Jx);
+    this->Jy  = std::move(other.Jy);
+    this->Dx  = std::move(other.Dx);
+    this->Dy  = std::move(other.Dy);
+    this->Zx  = std::move(other.Zx);
+    this->Zy  = std::move(other.Zy);
+    this->Jdx = std::move(other.Jdx);
+    this->Jdy = std::move(other.Jdy);
+    this->N   = std::move(other.N);
+}
+
+Molecule& Molecule::operator=(Molecule&& other) noexcept
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+    this->name            = std::move(other.name);
+    this->polarity        = other.polarity;
+    this->state           = other.state;
+    this->exciteStateName = std::move(other.exciteStateName);
+
+    this->ux  = std::move(other.ux);
+    this->uy  = std::move(other.uy);
+    this->Jx  = std::move(other.Jx);
+    this->Jy  = std::move(other.Jy);
+    this->Dx  = std::move(other.Dx);
+    this->Dy  = std::move(other.Dy);
+    this->Zx  = std::move(other.Zx);
+    this->Zy  = std::move(other.Zy);
+    this->Jdx = std::move(other.Jdx);
+    this->Jdy = std::move(other.Jdy);
+    this->N   = std::move(other.N);
+    return *this;
 }
 
 /// clang-format off
-void flowAnalysis::to_json(nlohmann::json& j, const Atom& p)
+void to_json(nlohmann::json& j, const Atom& p)
 {
-    j = nlohmann::json{{"name", p.name},
-                       {"state", p.state},
-                       {"exciteStateName", p.exciteStateName}};
+    j = nlohmann::json{{"name", p.name}, {"state", p.state}, {"exciteStateName", p.exciteStateName}};
 }
-void flowAnalysis::to_json(nlohmann::json& j, const Ion& p)
+void to_json(nlohmann::json& j, const Ion& p)
 {
-    j = nlohmann::json{{"name", p.name},
-                       {"polarity", p.polarity}};
+    j = nlohmann::json{{"name", p.name}, {"polarity", p.polarity}};
 }
-void flowAnalysis::to_json(nlohmann::json& j, const Molecule& p)
+void to_json(nlohmann::json& j, const Molecule& p)
 {
-    j = nlohmann::json{{"name", p.name},
-                       {"polarity", p.polarity},
-                       {"state", p.state},
-                       {"exciteStateName", p.exciteStateName}};
+    j = nlohmann::json{
+        {"name", p.name}, {"polarity", p.polarity}, {"state", p.state}, {"exciteStateName", p.exciteStateName}};
 }
 // clang-format on

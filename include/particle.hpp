@@ -25,9 +25,14 @@ class Atom
 
     Atom(std::string name, ExciteState state, std::string exciteStateName);
     Atom();
+
+    bool operator==(const Atom& other) const noexcept;
+    Atom(const Atom& other);
+    Atom& operator=(const Atom& other);
+    Atom(Atom&& other) noexcept;
+    Atom& operator=(Atom&& other) noexcept;
     ~Atom();
-    size_t hash() const;
-    bool   operator==(const Atom& other) const noexcept;
+    [[nodiscard]] size_t hash() const;
 };
 
 class Ion
@@ -45,8 +50,13 @@ class Ion
     Ion(std::string name, int polarity);
     Ion();
     ~Ion();
-    size_t hash() const;
-    bool   operator==(const Ion& other) const noexcept;
+    bool operator==(const Ion& other) const noexcept;
+    Ion(const Ion& other);
+    Ion& operator=(const Ion& other);
+    Ion(Ion&& other) noexcept;
+    Ion& operator=(Ion&& other) noexcept;
+
+    [[nodiscard]] size_t hash() const;
 };
 
 class Molecule
@@ -66,8 +76,14 @@ class Molecule
     Molecule(std::string name, int polarity, ExciteState state, std::string exciteStateName);
     Molecule();
     ~Molecule();
-    size_t hash() const;
-    bool   operator==(const Molecule& other) const noexcept;
+
+    bool operator==(const Molecule& other) const noexcept;
+    Molecule(const Molecule& other);
+    Molecule& operator=(const Molecule& other);
+    Molecule(Molecule&& other) noexcept;
+    Molecule& operator=(Molecule&& other) noexcept;
+
+    [[nodiscard]] size_t hash() const;
 };
 
 /// @brief 从 json 文件中读取粒子信息

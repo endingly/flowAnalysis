@@ -4,13 +4,9 @@
 
 using flowAnalysis::particle_manager;
 
-particle_manager::particle_manager()
-{
-}
+particle_manager::particle_manager() = default;
 
-particle_manager::~particle_manager()
-{
-}
+particle_manager::~particle_manager() = default;
 
 void flowAnalysis::to_json(nlohmann::json& j, const particle_manager& pm)
 {
