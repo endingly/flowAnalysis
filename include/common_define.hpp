@@ -14,9 +14,18 @@
 // s
 #define FLOW_ANALYSIS_DT 1e-20
 #define FLOW_ANALYSIS_GAMMA 0
+// 等离子体的边界
 #define FLOW_ANALYSIS_I2 7
 #define FLOW_ANALYSIS_I3 67
+
 #define FLOW_ANALYSIS_F_He 0
 #define FLOW_ANALYSIS_F_CO_2 1
 
+namespace flowAnalysis
+{
+
 using Matrix = Eigen::Matrix<double, FLOW_ANALYSIS_IMAX, FLOW_ANALYSIS_JMAX, Eigen::ColMajor>;
+using RVector = Eigen::Vector<double, FLOW_ANALYSIS_JMAX>;
+using CVector = Eigen::Vector<double, FLOW_ANALYSIS_IMAX>;
+
+} // namespace flowAnalysis

@@ -1,4 +1,6 @@
 {
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "builtin-baseline": "78b61582c9e093fda56a01ebb654be15a0033897",
   "name": "flow-analysis",
   "version": "0.0.1",
   "dependencies": [

@@ -18,17 +18,35 @@ TEST(particle_manager, init)
 TEST(particle_manager, to_json_file)
 {
     auto pm = std::make_unique<flowAnalysis::particle_manager>();
-    auto a  = std::make_unique<flowAnalysis::Atom>("H", flowAnalysis::ExciteState::Ground, "0");
-    auto i  = std::make_unique<flowAnalysis::Ion>("H+", 1);
-    auto m  = std::make_unique<flowAnalysis::Molecule>("H2", 0, flowAnalysis::ExciteState::Ground, "0");
-    pm->atom.insert(std::move(*a));
-    pm->ion.insert(std::move(*i));
-    pm->molecule.insert(std::move(*m));
+    // atom
+    auto C = std::make_unique<flowAnalysis::Atom>("C", flowAnalysis::ExciteState::Ground, "0");
+    auto O = std::make_unique<flowAnalysis::Atom>("O", flowAnalysis::ExciteState::Ground, "0");
+    // molecule
+    auto O2    = std::make_unique<flowAnalysis::Molecule>("O2", 0, flowAnalysis::ExciteState::Ground, "0");
+    auto CO    = std::make_unique<flowAnalysis::Molecule>("CO", 0, flowAnalysis::ExciteState::Ground, "0");
+    auto CO2   = std::make_unique<flowAnalysis::Molecule>("CO2", 0, flowAnalysis::ExciteState::Ground, "0");
+    auto CO2V1 = std::make_unique<flowAnalysis::Molecule>("CO2V1", -1, flowAnalysis::ExciteState::Ground, "0");
+    auto CO2V2 = std::make_unique<flowAnalysis::Molecule>("CO2V2", -2, flowAnalysis::ExciteState::Ground, "0");
+    auto CO2V3 = std::make_unique<flowAnalysis::Molecule>("CO2V3", -3, flowAnalysis::ExciteState::Ground, "0");
+    auto CO2V4 = std::make_unique<flowAnalysis::Molecule>("CO2V4", -4, flowAnalysis::ExciteState::Ground, "0");
+
+    auto ion = std::make_unique<flowAnalysis::Ion>("O2-", 1);
+
+    pm->atom.insert(std::move(*C));
+    pm->atom.insert(std::move(*O));
+    pm->ion.insert(std::move(*ion));
+    pm->molecule.insert(std::move(*O2));
+    pm->molecule.insert(std::move(*CO));
+    pm->molecule.insert(std::move(*CO2));
+    pm->molecule.insert(std::move(*CO2V1));
+    pm->molecule.insert(std::move(*CO2V2));
+    pm->molecule.insert(std::move(*CO2V3));
+    pm->molecule.insert(std::move(*CO2V4));
 
     nlohmann::json j = *pm;
     std::cout << j.dump(4) << std::endl;
 
-    fs::path p = fs::current_path() / "particle.json";
+    fs::path      p = fs::current_path() / "particle.json";
     std::ofstream o(p);
     o << j.dump(4);
     o.close();
@@ -36,8 +54,8 @@ TEST(particle_manager, to_json_file)
 
 TEST(particle_manager, from_json_file)
 {
-    fs::path p = fs::current_path() / "particle.json";
-    std::ifstream i(p);
+    fs::path       p = fs::current_path() / "particle.json";
+    std::ifstream  i(p);
     nlohmann::json j;
     i >> j;
     i.close();

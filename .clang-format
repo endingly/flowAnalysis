@@ -11,3 +11,5 @@ AlignTrailingComments:	true
 AlwaysBreakTemplateDeclarations:	true
 # 指针和引用的对齐: Left, Right, Middle
 PointerAlignment:	Left
+# 列限制
+ColumnLimit:	50
