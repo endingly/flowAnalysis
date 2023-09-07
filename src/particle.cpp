@@ -10,6 +10,7 @@ Atom::Atom()
     this->name            = "";
     this->state           = ExciteState::Ground;
     this->exciteStateName = "";
+    this->D               = 0;
 
     this->N  = Matrix::Zero();
     this->Dx = Matrix::Zero();
@@ -26,6 +27,7 @@ Atom::Atom(std::string name, ExciteState state,
     this->name            = std::move(name);
     this->state           = state;
     this->exciteStateName = std::move(exciteStateName);
+    this->D               = 0;
 
     this->N  = Matrix::Zero();
     this->Dx = Matrix::Zero();
@@ -56,6 +58,7 @@ Atom::Atom(const Atom& other)
     this->name            = other.name;
     this->state           = other.state;
     this->exciteStateName = other.exciteStateName;
+    this->D               = other.D;
 
     this->N  = other.N;
     this->Dx = other.Dx;
@@ -75,6 +78,7 @@ Atom& Atom::operator=(const Atom& other)
     this->name            = other.name;
     this->state           = other.state;
     this->exciteStateName = other.exciteStateName;
+    this->D               = other.D;
 
     this->N  = other.N;
     this->Dx = other.Dx;
@@ -91,6 +95,7 @@ Atom::Atom(Atom&& other) noexcept
     this->name            = std::move(other.name);
     this->state           = other.state;
     this->exciteStateName = std::move(other.exciteStateName);
+    this->D               = other.D;
 
     this->N  = std::move(other.N);
     this->Dx = std::move(other.Dx);
@@ -110,6 +115,7 @@ Atom& Atom::operator=(Atom&& other) noexcept
     this->name            = std::move(other.name);
     this->state           = other.state;
     this->exciteStateName = std::move(other.exciteStateName);
+    this->D               = other.D;
 
     this->N  = std::move(other.N);
     this->Dx = std::move(other.Dx);
@@ -125,6 +131,7 @@ Ion::Ion()
 {
     this->name     = "";
     this->polarity = 0;
+    this->D        = 0;
 
     this->ux  = Matrix::Zero();
     this->uy  = Matrix::Zero();
@@ -143,6 +150,7 @@ Ion::Ion(string name, int polarity)
 {
     this->name     = std::move(name);
     this->polarity = polarity;
+    this->D        = 0;
 
     this->ux  = Matrix::Zero();
     this->uy  = Matrix::Zero();
@@ -175,6 +183,7 @@ Ion::Ion(const Ion& other)
 {
     this->name     = other.name;
     this->polarity = other.polarity;
+    this->D        = other.D;
 
     this->ux  = other.ux;
     this->uy  = other.uy;
@@ -197,6 +206,7 @@ Ion& Ion::operator=(const Ion& other)
     }
     this->name     = other.name;
     this->polarity = other.polarity;
+    this->D        = other.D;
 
     this->ux  = other.ux;
     this->uy  = other.uy;
@@ -216,6 +226,7 @@ Ion::Ion(Ion&& other) noexcept
 {
     this->name     = std::move(other.name);
     this->polarity = other.polarity;
+    this->D        = other.D;
 
     this->ux  = std::move(other.ux);
     this->uy  = std::move(other.uy);
@@ -238,6 +249,7 @@ Ion& Ion::operator=(Ion&& other) noexcept
     }
     this->name     = std::move(other.name);
     this->polarity = other.polarity;
+    this->D        = other.D;
 
     this->ux  = std::move(other.ux);
     this->uy  = std::move(other.uy);
@@ -259,6 +271,7 @@ Molecule::Molecule()
     this->polarity        = 0;
     this->state           = ExciteState::Ground;
     this->exciteStateName = "";
+    this->D               = 0;
 
     this->ux  = Matrix::Zero();
     this->uy  = Matrix::Zero();
@@ -280,6 +293,7 @@ Molecule::Molecule(string name, int polarity, ExciteState state,
     this->polarity        = polarity;
     this->state           = state;
     this->exciteStateName = std::move(exciteStateName);
+    this->D               = 0;
 
     this->ux  = Matrix::Zero();
     this->uy  = Matrix::Zero();
@@ -317,6 +331,7 @@ Molecule::Molecule(const Molecule& other)
     this->polarity        = other.polarity;
     this->state           = other.state;
     this->exciteStateName = other.exciteStateName;
+    this->D               = other.D;
 
     this->ux  = other.ux;
     this->uy  = other.uy;
@@ -341,6 +356,7 @@ Molecule& Molecule::operator=(const Molecule& other)
     this->polarity        = other.polarity;
     this->state           = other.state;
     this->exciteStateName = other.exciteStateName;
+    this->D               = other.D;
 
     this->ux  = other.ux;
     this->uy  = other.uy;
@@ -362,6 +378,7 @@ Molecule::Molecule(Molecule&& other) noexcept
     this->polarity        = other.polarity;
     this->state           = other.state;
     this->exciteStateName = std::move(other.exciteStateName);
+    this->D               = other.D;
 
     this->ux  = std::move(other.ux);
     this->uy  = std::move(other.uy);
@@ -386,6 +403,7 @@ Molecule& Molecule::operator=(Molecule&& other) noexcept
     this->polarity        = other.polarity;
     this->state           = other.state;
     this->exciteStateName = std::move(other.exciteStateName);
+    this->D               = other.D;
 
     this->ux  = std::move(other.ux);
     this->uy  = std::move(other.uy);
