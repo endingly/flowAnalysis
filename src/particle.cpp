@@ -20,7 +20,8 @@ Atom::Atom()
     this->Jy = Matrix::Zero();
 }
 
-Atom::Atom(std::string name, ExciteState state, std::string exciteStateName)
+Atom::Atom(std::string name, ExciteState state,
+           std::string exciteStateName)
 {
     this->name            = std::move(name);
     this->state           = state;
@@ -39,12 +40,15 @@ Atom::~Atom() = default;
 
 size_t Atom::hash() const
 {
-    return std::hash<std::string>()(name) ^ std::hash<int>()((int)state) ^ std::hash<std::string>()(exciteStateName);
+    return std::hash<std::string>()(name) ^
+           std::hash<int>()((int)state) ^
+           std::hash<std::string>()(exciteStateName);
 }
 
 bool Atom::operator==(const Atom& other) const noexcept
 {
-    return this->name == other.name && this->state == other.state && this->exciteStateName == other.exciteStateName;
+    return this->name == other.name && this->state == other.state &&
+           this->exciteStateName == other.exciteStateName;
 }
 
 Atom::Atom(const Atom& other)
@@ -157,12 +161,14 @@ Ion::~Ion() = default;
 
 size_t Ion::hash() const
 {
-    return std::hash<std::string>()(name) ^ std::hash<int>()(polarity);
+    return std::hash<std::string>()(name) ^
+           std::hash<int>()(polarity);
 }
 
 bool Ion::operator==(const Ion& other) const noexcept
 {
-    return this->name == other.name && this->polarity == other.polarity;
+    return this->name == other.name &&
+           this->polarity == other.polarity;
 }
 
 Ion::Ion(const Ion& other)
@@ -267,7 +273,8 @@ Molecule::Molecule()
     this->N   = Matrix::Zero();
 }
 
-Molecule::Molecule(string name, int polarity, ExciteState state, string exciteStateName)
+Molecule::Molecule(string name, int polarity, ExciteState state,
+                   string exciteStateName)
 {
     this->name            = std::move(name);
     this->polarity        = polarity;
@@ -291,13 +298,16 @@ Molecule::~Molecule() = default;
 
 size_t Molecule::hash() const
 {
-    return std::hash<std::string>()(name) ^ std::hash<int>()(polarity) ^ std::hash<int>()((int)state) ^
+    return std::hash<std::string>()(name) ^
+           std::hash<int>()(polarity) ^ std::hash<int>()((int)state) ^
            std::hash<std::string>()(exciteStateName);
 }
 
 bool Molecule::operator==(const Molecule& other) const noexcept
 {
-    return this->name == other.name && this->polarity == other.polarity && this->state == other.state &&
+    return this->name == other.name &&
+           this->polarity == other.polarity &&
+           this->state == other.state &&
            this->exciteStateName == other.exciteStateName;
 }
 

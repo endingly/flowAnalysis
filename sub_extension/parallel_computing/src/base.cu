@@ -1,6 +1,5 @@
-#include "base.h"
+#include "base.cuh"
 #include <iostream>
-#include <stdio.h>
 
 __global__ void print_one()
 {

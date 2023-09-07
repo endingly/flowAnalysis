@@ -1,5 +1,6 @@
 #pragma once
 #include "common_define.hpp"
+#include "utility.hpp"
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -16,8 +17,7 @@ class Atom
 {
   public:
     std::string name;
-    ExciteState
-        state; // 激发状态，常规原子是 groud
+    ExciteState state; // 激发状态，常规原子是 groud
     std::string exciteStateName; // 激发状态
     double      D;               // 扩散系数
     Matrix      N;
@@ -29,8 +29,7 @@ class Atom
          std::string exciteStateName);
     Atom();
 
-    bool operator==(
-        const Atom& other) const noexcept;
+    bool operator==(const Atom& other) const noexcept;
     Atom(const Atom& other);
     Atom& operator=(const Atom& other);
     Atom(Atom&& other) noexcept;
@@ -49,14 +48,13 @@ class Ion
     Matrix      Jx, Jy;   // 电流密度
     Matrix      Dx, Dy;   // 扩散系数
     Matrix      Zx, Zy;   // 粒子流密度
-    Matrix Jdx, Jdy; // 电流密度在空间上的步进
-    Matrix N;        // 摩尔的量
+    Matrix      Jdx, Jdy; // 电流密度在空间上的步进
+    Matrix      N;        // 摩尔的量
 
     Ion(std::string name, int polarity);
     Ion();
     ~Ion();
-    bool operator==(
-        const Ion& other) const noexcept;
+    bool operator==(const Ion& other) const noexcept;
     Ion(const Ion& other);
     Ion& operator=(const Ion& other);
     Ion(Ion&& other) noexcept;
@@ -80,22 +78,20 @@ class Molecule
     Matrix      Jdx, Jdy;
     Matrix      N;
 
-    Molecule(std::string name, int polarity,
-             ExciteState state,
+    Molecule(std::string name, int polarity, ExciteState state,
              std::string exciteStateName);
     Molecule();
     ~Molecule();
 
-    bool operator==(
-        const Molecule& other) const noexcept;
+    bool operator==(const Molecule& other) const noexcept;
     Molecule(const Molecule& other);
     Molecule& operator=(const Molecule& other);
     Molecule(Molecule&& other) noexcept;
-    Molecule& operator=(
-        Molecule&& other) noexcept;
+    Molecule& operator=(Molecule&& other) noexcept;
 
     [[nodiscard]] size_t hash() const;
 };
+
 } // namespace flowAnalysis
 
 // -------------------------------------
@@ -116,8 +112,7 @@ concept Has_Hash_Function = requires {
 template <Has_Hash_Function T>
 struct hash<T>
 {
-    std::size_t operator()(
-        const T& obj) const noexcept
+    std::size_t operator()(const T& obj) const noexcept
     {
         return obj.hash();
     }
@@ -131,84 +126,68 @@ namespace nlohmann
 template <>
 struct adl_serializer<flowAnalysis::Atom>
 {
-    static flowAnalysis::Atom from_json(
-        const json& j)
+    static flowAnalysis::Atom from_json(const json& j)
     {
-        auto* p = new flowAnalysis::Atom();
-        p->name = j.at("name").get<std::string>();
-        p->state =
-            j.at("state")
-                .get<flowAnalysis::ExciteState>();
+        auto* p  = new flowAnalysis::Atom();
+        p->name  = j.at("name").get<std::string>();
+        p->state = j.at("state").get<flowAnalysis::ExciteState>();
         p->exciteStateName =
-            j.at("exciteStateName")
-                .get<std::string>();
-        p->D = j.at("D").get<double>();
+            j.at("exciteStateName").get<std::string>();
+        p->D = flowAnalysis::sstod(j.at("D").get<std::string>());
         return std::move(*p);
     }
 
-    static void to_json(json&              j,
-                        flowAnalysis::Atom p)
+    static void to_json(json& j, flowAnalysis::Atom p)
     {
         j = nlohmann::json{{"name", p.name},
                            {"state", p.state},
-                           {"exciteStateName",
-                            p.exciteStateName},
-                           {"D", p.D}};
+                           {"exciteStateName", p.exciteStateName},
+                           {"D", std::to_string(p.D)}};
     }
 };
 
 template <>
 struct adl_serializer<flowAnalysis::Ion>
 {
-    static flowAnalysis::Ion from_json(
-        const json& j)
+    static flowAnalysis::Ion from_json(const json& j)
     {
-        auto* p = new flowAnalysis::Ion();
-        p->name = j.at("name").get<std::string>();
+        auto* p     = new flowAnalysis::Ion();
+        p->name     = j.at("name").get<std::string>();
         p->polarity = j.at("polarity").get<int>();
-        p->D        = j.at("D").get<double>();
+        p->D = flowAnalysis::sstod(j.at("D").get<std::string>());
         return std::move(*p);
     }
 
-    static void to_json(json&             j,
-                        flowAnalysis::Ion p)
+    static void to_json(json& j, flowAnalysis::Ion p)
     {
-        j = nlohmann::json{
-            {"name", p.name},
-            {"polarity", p.polarity},
-            {"D", p.D}};
+        j = nlohmann::json{{"name", p.name},
+                           {"polarity", p.polarity},
+                           {"D", std::to_string(p.D)}};
     }
 };
 
 template <>
 struct adl_serializer<flowAnalysis::Molecule>
 {
-    static flowAnalysis::Molecule from_json(
-        const json& j)
+    static flowAnalysis::Molecule from_json(const json& j)
     {
-        auto* p = new flowAnalysis::Molecule();
-        p->name = j.at("name").get<std::string>();
+        auto* p     = new flowAnalysis::Molecule();
+        p->name     = j.at("name").get<std::string>();
         p->polarity = j.at("polarity").get<int>();
-        p->state =
-            j.at("state")
-                .get<flowAnalysis::ExciteState>();
+        p->state    = j.at("state").get<flowAnalysis::ExciteState>();
         p->exciteStateName =
-            j.at("exciteStateName")
-                .get<std::string>();
-        p->D = j.at("D").get<double>();
+            j.at("exciteStateName").get<std::string>();
+        p->D = flowAnalysis::sstod(j.at("D").get<std::string>());
         return std::move(*p);
     }
 
-    static void to_json(json&                  j,
-                        flowAnalysis::Molecule p)
+    static void to_json(json& j, flowAnalysis::Molecule p)
     {
-        j = nlohmann::json{
-            {"name", p.name},
-            {"polarity", p.polarity},
-            {"state", p.state},
-            {"exciteStateName",
-             p.exciteStateName},
-            {"D", p.D}};
+        j = nlohmann::json{{"name", p.name},
+                           {"polarity", p.polarity},
+                           {"state", p.state},
+                           {"exciteStateName", p.exciteStateName},
+                           {"D", std::to_string(p.D)}};
     }
 };
 

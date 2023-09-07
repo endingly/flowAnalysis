@@ -9,4 +9,4 @@ set(CMAKE_CUDA_EXTENSIONS OFF)
 
 file(GLOB_RECURSE _paraller_computing_source "src/*.cu")
 add_library(paraller_computing ${_paraller_computing_source})
-target_include_directories(paraller_computing PUBLIC include)
+target_include_directories(paraller_computing PUBLIC include)   
