@@ -1,7 +1,7 @@
 #pragma once
 #include "particle.hpp"
 #include <string>
-#include <unordered_set>
+#include <unordered_map>
 
 namespace flowAnalysis
 {
@@ -9,9 +9,9 @@ namespace flowAnalysis
 class particle_manager
 {
   public:
-    std::unordered_set<Atom>     atom;
-    std::unordered_set<Molecule> molecule;
-    std::unordered_set<Ion>      ion;
+    std::unordered_map<std::string, Atom>     atom;
+    std::unordered_map<std::string, Molecule> molecule;
+    std::unordered_map<std::string, Ion>      ion;
 
     particle_manager();
     ~particle_manager();

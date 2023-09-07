@@ -1,8 +1,8 @@
 #pragma once
 #include "common_define.hpp"
 #include "utility.hpp"
+#include <fmt/core.h>
 #include <nlohmann/json.hpp>
-#include <string>
 
 namespace flowAnalysis
 {
@@ -142,7 +142,7 @@ struct adl_serializer<flowAnalysis::Atom>
         j = nlohmann::json{{"name", p.name},
                            {"state", p.state},
                            {"exciteStateName", p.exciteStateName},
-                           {"D", std::to_string(p.D)}};
+                           {"D", fmt::format("{0:.2e}", p.D)}};
     }
 };
 
@@ -162,7 +162,7 @@ struct adl_serializer<flowAnalysis::Ion>
     {
         j = nlohmann::json{{"name", p.name},
                            {"polarity", p.polarity},
-                           {"D", std::to_string(p.D)}};
+                           {"D", fmt::format("{0:.2e}", p.D)}};
     }
 };
 
@@ -187,7 +187,7 @@ struct adl_serializer<flowAnalysis::Molecule>
                            {"polarity", p.polarity},
                            {"state", p.state},
                            {"exciteStateName", p.exciteStateName},
-                           {"D", std::to_string(p.D)}};
+                           {"D", fmt::format("{0:.2e}", p.D)}};
     }
 };
 

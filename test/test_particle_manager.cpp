@@ -35,37 +35,38 @@ TEST(particle_manager, to_json_file)
 
     auto CO = std::make_unique<flowAnalysis::Molecule>(
         "CO", 0, flowAnalysis::ExciteState::Ground, "0");
-    CO->D    = 9.86E16;
+    CO->D = 9.86E16;
 
     auto CO2 = std::make_unique<flowAnalysis::Molecule>(
         "CO2", 0, flowAnalysis::ExciteState::Ground, "0");
-    CO2->D   = 3.07E18;
+    CO2->D = 3.07E18;
 
     auto CO2V1 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V1", -1, flowAnalysis::ExciteState::Ground, "0");
-    CO2V1->D = 3.07E18;
+    CO2V1->D   = 3.07E18;
     auto CO2V2 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V2", -2, flowAnalysis::ExciteState::Ground, "0");
-    CO2V2->D = 3.07E18;
+    CO2V2->D   = 3.07E18;
     auto CO2V3 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V3", -3, flowAnalysis::ExciteState::Ground, "0");
-    CO2V3->D = 3.07E18;
+    CO2V3->D   = 3.07E18;
     auto CO2V4 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V4", -4, flowAnalysis::ExciteState::Ground, "0");
     CO2V4->D = 3.07E18;
 
     auto ion = std::make_unique<flowAnalysis::Ion>("O2-", 1);
 
-    pm->atom.insert(std::move(*C));
-    pm->atom.insert(std::move(*O));
-    pm->ion.insert(std::move(*ion));
-    pm->molecule.insert(std::move(*O2));
-    pm->molecule.insert(std::move(*CO));
-    pm->molecule.insert(std::move(*CO2));
-    pm->molecule.insert(std::move(*CO2V1));
-    pm->molecule.insert(std::move(*CO2V2));
-    pm->molecule.insert(std::move(*CO2V3));
-    pm->molecule.insert(std::move(*CO2V4));
+    pm->atom[C->name]  = std::move(*C);
+    pm->atom[O->name]  = std::move(*O);
+    pm->ion[ion->name] = std::move(*ion);
+
+    pm->molecule[O2->name]    = std::move(*O2);
+    pm->molecule[CO->name]    = std::move(*CO);
+    pm->molecule[CO2->name]   = std::move(*CO2);
+    pm->molecule[CO2V1->name] = std::move(*CO2V1);
+    pm->molecule[CO2V2->name] = std::move(*CO2V2);
+    pm->molecule[CO2V3->name] = std::move(*CO2V3);
+    pm->molecule[CO2V4->name] = std::move(*CO2V4);
 
     nlohmann::json j = *pm;
     std::cout << j.dump(4) << '\n';
