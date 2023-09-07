@@ -25,7 +25,7 @@ class fluid
     ~fluid();
 
   private:
-    friend class calculation_formula;
+    friend class solver;
 };
 
 } // namespace flowAnalysis
