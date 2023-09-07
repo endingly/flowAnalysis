@@ -10,6 +10,7 @@
     "eigen3",
     "cuda",
     "nlohmann-json",
-    "glog"
+    "glog",
+    "muparser"
   ]
 }

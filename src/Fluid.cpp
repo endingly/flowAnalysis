@@ -3,11 +3,12 @@
 
 flowAnalysis::fluid::fluid()
 {
-    gama_O2                = 0.02;
-    gama_CO2               = 0.02;
-    SecEnergy              = 0.5;
-    MidParticleDensity     = FLOW_ANALYSIS_PRESSURE * 133.3 * 1e-6 / (1.38 * 1e-23 * 300);
-    MidParticleDensity_CO2 = MidParticleDensity * FLOW_ANALYSIS_F_CO_2;
+    gama_O2            = 0.02;
+    gama_CO2           = 0.02;
+    SecEnergy          = 0.5;
+    MidParticleDensity = FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY;
+    MidParticleDensity_CO2 =
+        FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY * FLOW_ANALYSIS_F_CO_2;
 
     E   = Matrix::Zero();
     Ex  = Matrix::Zero();
@@ -31,11 +32,11 @@ flowAnalysis::fluid::fluid()
      * |                             |
      *  ----------------------------- <---- 外电路电压施压区
      */
-    phi               = Matrix::Zero();
-    auto r            = RVector::Ones().transpose() * FLOW_ANALYSIS_VOLTAGE;
+    phi    = Matrix::Zero();
+    auto r = RVector::Ones().transpose() * FLOW_ANALYSIS_VOLTAGE;
     phi.topRows(1)    = r;
     phi.bottomRows(1) = r;
-        
+
     Kte  = Matrix::Zero();
     Ener = Matrix::Zero();
 }

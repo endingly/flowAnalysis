@@ -22,23 +22,37 @@ TEST(particle_manager, to_json_file)
     // atom
     auto C = std::make_unique<flowAnalysis::Atom>(
         "C", flowAnalysis::ExciteState::Ground, "0");
+    C->D = 6.5E16;
+
     auto O = std::make_unique<flowAnalysis::Atom>(
         "O", flowAnalysis::ExciteState::Ground, "0");
+    O->D = 6.5E16;
+
     // molecule
     auto O2 = std::make_unique<flowAnalysis::Molecule>(
         "O2", 0, flowAnalysis::ExciteState::Ground, "0");
+    O2->D = 7.3E18;
+
     auto CO = std::make_unique<flowAnalysis::Molecule>(
         "CO", 0, flowAnalysis::ExciteState::Ground, "0");
+    CO->D    = 9.86E16;
+
     auto CO2 = std::make_unique<flowAnalysis::Molecule>(
         "CO2", 0, flowAnalysis::ExciteState::Ground, "0");
+    CO2->D   = 3.07E18;
+
     auto CO2V1 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V1", -1, flowAnalysis::ExciteState::Ground, "0");
+    CO2V1->D = 3.07E18;
     auto CO2V2 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V2", -2, flowAnalysis::ExciteState::Ground, "0");
+    CO2V2->D = 3.07E18;
     auto CO2V3 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V3", -3, flowAnalysis::ExciteState::Ground, "0");
+    CO2V3->D = 3.07E18;
     auto CO2V4 = std::make_unique<flowAnalysis::Molecule>(
         "CO2V4", -4, flowAnalysis::ExciteState::Ground, "0");
+    CO2V4->D = 3.07E18;
 
     auto ion = std::make_unique<flowAnalysis::Ion>("O2-", 1);
 

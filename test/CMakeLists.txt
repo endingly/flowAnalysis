@@ -12,4 +12,9 @@ target_link_libraries(
 
 file(GLOB_RECURSE TEST_SOURCES "*.cpp")
 add_executable(${PROJECT_NAME}_test ${TEST_SOURCES})
-target_link_libraries(${PROJECT_NAME}_test GTest::gtest GTest::gtest_main ${PROJECT_NAME}_lib)
+target_link_libraries(
+    ${PROJECT_NAME}_test 
+    GTest::gtest 
+    GTest::gtest_main 
+    ${PROJECT_NAME}_lib
+)
