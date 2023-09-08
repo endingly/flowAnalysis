@@ -12,6 +12,10 @@ class solver
   public:
     solver();
     ~solver();
+
+  public:
+    /// @brief 初始化迁移与扩散矩阵
+    void init_MigrationAndDiffusion();
 };
 
 } // namespace flowAnalysis

@@ -11,7 +11,7 @@ TEST(numeric, StringToConvert)
 
 TEST(numeric, calculation_formula_StringToConvert)
 {
-    string str    = "1.9e16*1.9e16";
+    string str    = "1.9e16*1.9e16/MN";
     auto   result = flowAnalysis::sstod(str);
     std::cout << result << "\n";
 }
