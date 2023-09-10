@@ -19,6 +19,15 @@ Atom::Atom()
     this->Zy = Matrix::Zero();
     this->Jx = Matrix::Zero();
     this->Jy = Matrix::Zero();
+
+    this->G1x = Matrix::Zero();
+    this->G1y = Matrix::Zero();
+    this->G2x = Matrix::Zero();
+    this->G2y = Matrix::Zero();
+    this->H1x = Matrix::Zero();
+    this->H1y = Matrix::Zero();
+    this->LPx = Matrix::Zero();
+    this->LPy = Matrix::Zero();
 }
 
 Atom::Atom(std::string name, ExciteState state,
@@ -36,22 +45,18 @@ Atom::Atom(std::string name, ExciteState state,
     this->Zy = Matrix::Zero();
     this->Jx = Matrix::Zero();
     this->Jy = Matrix::Zero();
+
+    this->G1x = Matrix::Zero();
+    this->G1y = Matrix::Zero();
+    this->G2x = Matrix::Zero();
+    this->G2y = Matrix::Zero();
+    this->H1x = Matrix::Zero();
+    this->H1y = Matrix::Zero();
+    this->LPx = Matrix::Zero();
+    this->LPy = Matrix::Zero();
 }
 
 Atom::~Atom() = default;
-
-size_t Atom::hash() const
-{
-    return std::hash<std::string>()(name) ^
-           std::hash<int>()((int)state) ^
-           std::hash<std::string>()(exciteStateName);
-}
-
-bool Atom::operator==(const Atom& other) const noexcept
-{
-    return this->name == other.name && this->state == other.state &&
-           this->exciteStateName == other.exciteStateName;
-}
 
 Atom::Atom(const Atom& other)
 {
@@ -67,6 +72,15 @@ Atom::Atom(const Atom& other)
     this->Zy = other.Zy;
     this->Jx = other.Jx;
     this->Jy = other.Jy;
+
+    this->G1x = other.G1x;
+    this->G1y = other.G1y;
+    this->G2x = other.G2x;
+    this->G2y = other.G2y;
+    this->H1x = other.H1x;
+    this->H1y = other.H1y;
+    this->LPx = other.LPx;
+    this->LPy = other.LPy;
 }
 
 Atom& Atom::operator=(const Atom& other)
@@ -87,6 +101,15 @@ Atom& Atom::operator=(const Atom& other)
     this->Zy = other.Zy;
     this->Jx = other.Jx;
     this->Jy = other.Jy;
+
+    this->G1x = other.G1x;
+    this->G1y = other.G1y;
+    this->G2x = other.G2x;
+    this->G2y = other.G2y;
+    this->H1x = other.H1x;
+    this->H1y = other.H1y;
+    this->LPx = other.LPx;
+    this->LPy = other.LPy;
     return *this;
 }
 
@@ -104,6 +127,15 @@ Atom::Atom(Atom&& other) noexcept
     this->Zy = std::move(other.Zy);
     this->Jx = std::move(other.Jx);
     this->Jy = std::move(other.Jy);
+
+    this->G1x = std::move(other.G1x);
+    this->G1y = std::move(other.G1y);
+    this->G2x = std::move(other.G2x);
+    this->G2y = std::move(other.G2y);
+    this->H1x = std::move(other.H1x);
+    this->H1y = std::move(other.H1y);
+    this->LPx = std::move(other.LPx);
+    this->LPy = std::move(other.LPy);
 }
 
 Atom& Atom::operator=(Atom&& other) noexcept
@@ -124,6 +156,15 @@ Atom& Atom::operator=(Atom&& other) noexcept
     this->Zy = std::move(other.Zy);
     this->Jx = std::move(other.Jx);
     this->Jy = std::move(other.Jy);
+
+    this->G1x = std::move(other.G1x);
+    this->G1y = std::move(other.G1y);
+    this->G2x = std::move(other.G2x);
+    this->G2y = std::move(other.G2y);
+    this->H1x = std::move(other.H1x);
+    this->H1y = std::move(other.H1y);
+    this->LPx = std::move(other.LPx);
+    this->LPy = std::move(other.LPy);
     return *this;
 }
 
@@ -144,6 +185,15 @@ Ion::Ion()
     this->Jdx = Matrix::Zero();
     this->Jdy = Matrix::Zero();
     this->N   = Matrix::Zero();
+
+    this->G1x = Matrix::Zero();
+    this->G1y = Matrix::Zero();
+    this->G2x = Matrix::Zero();
+    this->G2y = Matrix::Zero();
+    this->H1x = Matrix::Zero();
+    this->H1y = Matrix::Zero();
+    this->LPx = Matrix::Zero();
+    this->LPy = Matrix::Zero();
 }
 
 Ion::Ion(string name, int polarity)
@@ -163,21 +213,18 @@ Ion::Ion(string name, int polarity)
     this->Jdx = Matrix::Zero();
     this->Jdy = Matrix::Zero();
     this->N   = Matrix::Zero();
+
+    this->G1x = Matrix::Zero();
+    this->G1y = Matrix::Zero();
+    this->G2x = Matrix::Zero();
+    this->G2y = Matrix::Zero();
+    this->H1x = Matrix::Zero();
+    this->H1y = Matrix::Zero();
+    this->LPx = Matrix::Zero();
+    this->LPy = Matrix::Zero();
 }
 
 Ion::~Ion() = default;
-
-size_t Ion::hash() const
-{
-    return std::hash<std::string>()(name) ^
-           std::hash<int>()(polarity);
-}
-
-bool Ion::operator==(const Ion& other) const noexcept
-{
-    return this->name == other.name &&
-           this->polarity == other.polarity;
-}
 
 Ion::Ion(const Ion& other)
 {
@@ -196,6 +243,15 @@ Ion::Ion(const Ion& other)
     this->Jdx = other.Jdx;
     this->Jdy = other.Jdy;
     this->N   = other.N;
+
+    this->G1x = other.G1x;
+    this->G1y = other.G1y;
+    this->G2x = other.G2x;
+    this->G2y = other.G2y;
+    this->H1x = other.H1x;
+    this->H1y = other.H1y;
+    this->LPx = other.LPx;
+    this->LPy = other.LPy;
 }
 
 Ion& Ion::operator=(const Ion& other)
@@ -219,6 +275,16 @@ Ion& Ion::operator=(const Ion& other)
     this->Jdx = other.Jdx;
     this->Jdy = other.Jdy;
     this->N   = other.N;
+
+    this->G1x = other.G1x;
+    this->G1y = other.G1y;
+    this->G2x = other.G2x;
+    this->G2y = other.G2y;
+    this->H1x = other.H1x;
+    this->H1y = other.H1y;
+    this->LPx = other.LPx;
+    this->LPy = other.LPy;
+
     return *this;
 }
 
@@ -239,6 +305,15 @@ Ion::Ion(Ion&& other) noexcept
     this->Jdx = std::move(other.Jdx);
     this->Jdy = std::move(other.Jdy);
     this->N   = std::move(other.N);
+
+    this->G1x = std::move(other.G1x);
+    this->G1y = std::move(other.G1y);
+    this->G2x = std::move(other.G2x);
+    this->G2y = std::move(other.G2y);
+    this->H1x = std::move(other.H1x);
+    this->H1y = std::move(other.H1y);
+    this->LPx = std::move(other.LPx);
+    this->LPy = std::move(other.LPy);
 }
 
 Ion& Ion::operator=(Ion&& other) noexcept
@@ -262,6 +337,15 @@ Ion& Ion::operator=(Ion&& other) noexcept
     this->Jdx = std::move(other.Jdx);
     this->Jdy = std::move(other.Jdy);
     this->N   = std::move(other.N);
+
+    this->G1x = std::move(other.G1x);
+    this->G1y = std::move(other.G1y);
+    this->G2x = std::move(other.G2x);
+    this->G2y = std::move(other.G2y);
+    this->H1x = std::move(other.H1x);
+    this->H1y = std::move(other.H1y);
+    this->LPx = std::move(other.LPx);
+    this->LPy = std::move(other.LPy);
     return *this;
 }
 
@@ -284,6 +368,15 @@ Molecule::Molecule()
     this->Jdx = Matrix::Zero();
     this->Jdy = Matrix::Zero();
     this->N   = Matrix::Zero();
+
+    this->G1x = Matrix::Zero();
+    this->G1y = Matrix::Zero();
+    this->G2x = Matrix::Zero();
+    this->G2y = Matrix::Zero();
+    this->H1x = Matrix::Zero();
+    this->H1y = Matrix::Zero();
+    this->LPx = Matrix::Zero();
+    this->LPy = Matrix::Zero();
 }
 
 Molecule::Molecule(string name, int polarity, ExciteState state,
@@ -306,24 +399,18 @@ Molecule::Molecule(string name, int polarity, ExciteState state,
     this->Jdx = Matrix::Zero();
     this->Jdy = Matrix::Zero();
     this->N   = Matrix::Zero();
+
+    this->G1x = Matrix::Zero();
+    this->G1y = Matrix::Zero();
+    this->G2x = Matrix::Zero();
+    this->G2y = Matrix::Zero();
+    this->H1x = Matrix::Zero();
+    this->H1y = Matrix::Zero();
+    this->LPx = Matrix::Zero();
+    this->LPy = Matrix::Zero();
 }
 
 Molecule::~Molecule() = default;
-
-size_t Molecule::hash() const
-{
-    return std::hash<std::string>()(name) ^
-           std::hash<int>()(polarity) ^ std::hash<int>()((int)state) ^
-           std::hash<std::string>()(exciteStateName);
-}
-
-bool Molecule::operator==(const Molecule& other) const noexcept
-{
-    return this->name == other.name &&
-           this->polarity == other.polarity &&
-           this->state == other.state &&
-           this->exciteStateName == other.exciteStateName;
-}
 
 Molecule::Molecule(const Molecule& other)
 {
@@ -344,6 +431,15 @@ Molecule::Molecule(const Molecule& other)
     this->Jdx = other.Jdx;
     this->Jdy = other.Jdy;
     this->N   = other.N;
+
+    this->G1x = other.G1x;
+    this->G1y = other.G1y;
+    this->G2x = other.G2x;
+    this->G2y = other.G2y;
+    this->H1x = other.H1x;
+    this->H1y = other.H1y;
+    this->LPx = other.LPx;
+    this->LPy = other.LPy;
 }
 
 Molecule& Molecule::operator=(const Molecule& other)
@@ -369,6 +465,15 @@ Molecule& Molecule::operator=(const Molecule& other)
     this->Jdx = other.Jdx;
     this->Jdy = other.Jdy;
     this->N   = other.N;
+
+    this->G1x = other.G1x;
+    this->G1y = other.G1y;
+    this->G2x = other.G2x;
+    this->G2y = other.G2y;
+    this->H1x = other.H1x;
+    this->H1y = other.H1y;
+    this->LPx = other.LPx;
+    this->LPy = other.LPy;
     return *this;
 }
 
@@ -391,6 +496,15 @@ Molecule::Molecule(Molecule&& other) noexcept
     this->Jdx = std::move(other.Jdx);
     this->Jdy = std::move(other.Jdy);
     this->N   = std::move(other.N);
+
+    this->G1x = std::move(other.G1x);
+    this->G1y = std::move(other.G1y);
+    this->G2x = std::move(other.G2x);
+    this->G2y = std::move(other.G2y);
+    this->H1x = std::move(other.H1x);
+    this->H1y = std::move(other.H1y);
+    this->LPx = std::move(other.LPx);
+    this->LPy = std::move(other.LPy);
 }
 
 Molecule& Molecule::operator=(Molecule&& other) noexcept
@@ -416,5 +530,14 @@ Molecule& Molecule::operator=(Molecule&& other) noexcept
     this->Jdx = std::move(other.Jdx);
     this->Jdy = std::move(other.Jdy);
     this->N   = std::move(other.N);
+
+    this->G1x = std::move(other.G1x);
+    this->G1y = std::move(other.G1y);
+    this->G2x = std::move(other.G2x);
+    this->G2y = std::move(other.G2y);
+    this->H1x = std::move(other.H1x);
+    this->H1y = std::move(other.H1y);
+    this->LPx = std::move(other.LPx);
+    this->LPy = std::move(other.LPy);
     return *this;
 }

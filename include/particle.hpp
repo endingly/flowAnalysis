@@ -25,6 +25,11 @@ class Atom
     Matrix      Zx, Zy;
     Matrix      Jx, Jy;
 
+    Matrix G1x, G1y;
+    Matrix G2x, G2y;
+    Matrix H1x, H1y;
+    Matrix LPx, LPy;
+
     Atom(std::string name, ExciteState state,
          std::string exciteStateName);
     Atom();
@@ -50,6 +55,11 @@ class Ion
     Matrix      Zx, Zy;   // 粒子流密度
     Matrix      Jdx, Jdy; // 电流密度在空间上的步进
     Matrix      N;        // 摩尔的量
+
+    Matrix G1x, G1y;
+    Matrix G2x, G2y;
+    Matrix H1x, H1y;
+    Matrix LPx, LPy;
 
     Ion(std::string name, int polarity);
     Ion();
@@ -78,6 +88,11 @@ class Molecule
     Matrix      Jdx, Jdy;
     Matrix      N;
 
+    Matrix G1x, G1y;
+    Matrix G2x, G2y;
+    Matrix H1x, H1y;
+    Matrix LPx, LPy;
+
     Molecule(std::string name, int polarity, ExciteState state,
              std::string exciteStateName);
     Molecule();
@@ -94,50 +109,22 @@ class Molecule
 
 } // namespace flowAnalysis
 
-// -------------------------------------
-// 为了让自定义的类型可以作为 std::unordered_map
-// 的 key
-namespace std
-{
-
-template <typename T>
-concept Has_Hash_Function = requires {
-    requires requires(const T obj) {
-        {
-            obj.hash()
-        } -> std::same_as<std::size_t>;
-    };
-};
-
-template <Has_Hash_Function T>
-struct hash<T>
-{
-    std::size_t operator()(const T& obj) const noexcept
-    {
-        return obj.hash();
-    }
-};
-
-} // namespace std
-
 // 对于拥有移动构造的类，需要另外特化
 namespace nlohmann
 {
 template <>
 struct adl_serializer<flowAnalysis::Atom>
 {
-    static flowAnalysis::Atom from_json(const json& j)
+    static void from_json(const json& j, flowAnalysis::Atom& p)
     {
-        auto* p  = new flowAnalysis::Atom();
-        p->name  = j.at("name").get<std::string>();
-        p->state = j.at("state").get<flowAnalysis::ExciteState>();
-        p->exciteStateName =
+        p.name  = j.at("name").get<std::string>();
+        p.state = j.at("state").get<flowAnalysis::ExciteState>();
+        p.exciteStateName =
             j.at("exciteStateName").get<std::string>();
-        p->D = flowAnalysis::sstod(j.at("D").get<std::string>());
-        return std::move(*p);
+        p.D = flowAnalysis::sstod(j.at("D").get<std::string>());
     }
 
-    static void to_json(json& j, flowAnalysis::Atom p)
+    static void to_json(json& j, const flowAnalysis::Atom& p)
     {
         j = nlohmann::json{{"name", p.name},
                            {"state", p.state},
@@ -149,16 +136,14 @@ struct adl_serializer<flowAnalysis::Atom>
 template <>
 struct adl_serializer<flowAnalysis::Ion>
 {
-    static flowAnalysis::Ion from_json(const json& j)
+    static void from_json(const json& j, flowAnalysis::Ion& p)
     {
-        auto* p     = new flowAnalysis::Ion();
-        p->name     = j.at("name").get<std::string>();
-        p->polarity = j.at("polarity").get<int>();
-        p->D = flowAnalysis::sstod(j.at("D").get<std::string>());
-        return std::move(*p);
+        p.name     = j.at("name").get<std::string>();
+        p.polarity = j.at("polarity").get<int>();
+        p.D = flowAnalysis::sstod(j.at("D").get<std::string>());
     }
 
-    static void to_json(json& j, flowAnalysis::Ion p)
+    static void to_json(json& j, const flowAnalysis::Ion& p)
     {
         j = nlohmann::json{{"name", p.name},
                            {"polarity", p.polarity},
@@ -169,19 +154,17 @@ struct adl_serializer<flowAnalysis::Ion>
 template <>
 struct adl_serializer<flowAnalysis::Molecule>
 {
-    static flowAnalysis::Molecule from_json(const json& j)
+    static void from_json(const json& j, flowAnalysis::Molecule& p)
     {
-        auto* p     = new flowAnalysis::Molecule();
-        p->name     = j.at("name").get<std::string>();
-        p->polarity = j.at("polarity").get<int>();
-        p->state    = j.at("state").get<flowAnalysis::ExciteState>();
-        p->exciteStateName =
+        p.name     = j.at("name").get<std::string>();
+        p.polarity = j.at("polarity").get<int>();
+        p.state    = j.at("state").get<flowAnalysis::ExciteState>();
+        p.exciteStateName =
             j.at("exciteStateName").get<std::string>();
-        p->D = flowAnalysis::sstod(j.at("D").get<std::string>());
-        return std::move(*p);
+        p.D = flowAnalysis::sstod(j.at("D").get<std::string>());
     }
 
-    static void to_json(json& j, flowAnalysis::Molecule p)
+    static void to_json(json& j, const flowAnalysis::Molecule& p)
     {
         j = nlohmann::json{{"name", p.name},
                            {"polarity", p.polarity},
