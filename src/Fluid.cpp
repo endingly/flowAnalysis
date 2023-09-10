@@ -1,6 +1,9 @@
 #include "fluid.hpp"
 #include "common_define.hpp"
+#include "particle_manager.hpp"
 #include <filesystem>
+#include <fstream>
+#include <memory>
 
 namespace fs = std::filesystem;
 
@@ -45,12 +48,13 @@ flowAnalysis::fluid::fluid()
     Zex  = Matrix::Zero();
     Zey  = Matrix::Zero();
 
-    // fs::path       p = fs::current_path() / "particle.json";
-    // std::ifstream  f(p.string().c_str());
-    // nlohmann::json j;
-    // f >> j;
-
-    // f.close();
+    fs::path       p = fs::current_path() / "particle.json";
+    std::ifstream  f(p.string().c_str());
+    nlohmann::json j;
+    f >> j;
+    pm = *(new flowAnalysis::particle_manager());
+    pm = j;
+    f.close();
 }
 
 flowAnalysis::fluid::~fluid() = default;

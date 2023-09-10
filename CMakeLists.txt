@@ -10,7 +10,7 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
 endif()
 
-option(ENBALE_STACK_TRACE "enable stack trace" OFF)
+option(ENBALE_STACK_TRACE "enable stack trace" ON)
 option(ENABLE_TEST "enable test" ON)
 
 # package settings

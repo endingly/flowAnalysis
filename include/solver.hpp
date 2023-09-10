@@ -33,8 +33,9 @@ class solver
     /// @brief 初始化用于计算粒子流密度间接矩阵，在 init_MigrationAndDiffusion 中调用
     void init_Zx();
 
-    static auto H1(const Matrix& Z);
-    static auto G1(const Matrix& Z);
+  public:
+    static Matrix& H1(const Matrix& Z);
+    static Matrix& G1(const Matrix& Z);
 };
 
 } // namespace flowAnalysis

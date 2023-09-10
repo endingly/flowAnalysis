@@ -39,7 +39,6 @@ class Atom
     Atom(Atom&& other) noexcept;
     Atom& operator=(Atom&& other) noexcept;
     ~Atom();
-    [[nodiscard]] size_t hash() const;
 };
 
 class Ion
@@ -68,8 +67,6 @@ class Ion
     Ion& operator=(const Ion& other);
     Ion(Ion&& other) noexcept;
     Ion& operator=(Ion&& other) noexcept;
-
-    [[nodiscard]] size_t hash() const;
 };
 
 class Molecule
@@ -101,8 +98,6 @@ class Molecule
     Molecule& operator=(const Molecule& other);
     Molecule(Molecule&& other) noexcept;
     Molecule& operator=(Molecule&& other) noexcept;
-
-    [[nodiscard]] size_t hash() const;
 };
 
 } // namespace flowAnalysis

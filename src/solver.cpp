@@ -15,6 +15,8 @@ solver::solver()
     dx = double(FLOW_ANALYSIS_IMAX) / (double(FLOW_ANALYSIS_IMAX) - 1);
     dy = double(FLOW_ANALYSIS_JMAX) / (double(FLOW_ANALYSIS_JMAX) - 1);
     f  = std::make_unique<fluid>();
+
+    init_MigrationAndDiffusion();
 }
 
 solver::~solver() = default;
@@ -59,8 +61,8 @@ void solver::init_uex()
 
 void solver::init_Dex()
 {
-    auto               Kte   = f->Kte.array();
-    auto               Dex   = f->Dex.array();
+    auto Kte = f->Kte.array();
+    auto Dex = f->Dex.array();
 
     Dex = (Kte < 0.1).select(1.00515 * 1.0E22 / FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY, Dex);
     Dex = (Kte >= 0.1 && Kte < 1.159)
@@ -168,11 +170,11 @@ void solver::init_Zx()
     ZxCO2   = uxCO2 / DxCO2 * Ex * dx;
 }
 
-static auto G1(const Matrix& Z)
+Matrix& solver::G1(const Matrix& Z)
 {
-    double z1     = -60.0;
-    double z2     = 1.0e-5;
-    double z3     = 60.0;
+    double z1 = -60.0;
+    double z2 = 1.0e-5;
+    double z3 = 60.0;
     Matrix result = Matrix::Zero();
     auto   r      = result.array();
 
@@ -183,16 +185,16 @@ static auto G1(const Matrix& Z)
     r = (z.abs() >= z2 && z.abs() < z3)
             .select((z.exp() * (1 - z) - 1.0) / (z.exp() - 1.0).pow(2), z);
 
-    return std::move(result);
+    return result;
 }
 
-static auto H1(const Matrix& Z)
+Matrix& solver::H1(const Matrix& Z)
 {
     double z1     = -60.0;
     double z2     = 1.0e-5;
     double z3     = 60.0;
     Matrix result = Matrix::Zero();
-    auto   r      = result.array();
+    auto r = result.array();
 
     auto z = Z.array();
 
@@ -200,5 +202,5 @@ static auto H1(const Matrix& Z)
     r = (z.abs() >= z1 && z.abs() < z2).select(z.exp() / (1 + z / 2).pow(2), z);
     r = (z.abs() >= z2 && z.abs() < z3).select((z.exp() * z.pow(2)) / (z.exp() - 1.0).pow(2), z);
 
-    return std::move(result);
+    return result;
 }

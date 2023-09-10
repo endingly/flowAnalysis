@@ -1,5 +1,6 @@
 #pragma once
 #include "particle.hpp"
+#include "utility.hpp"
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -27,17 +28,13 @@ struct adl_serializer<flowAnalysis::particle_manager>
 {
     static void from_json(const json& j, flowAnalysis::particle_manager& p)
     {
-        p.atom.clear();
-        p.molecule.clear();
-        p.ion.clear();
-
         for (const auto& item : j.at("atom").items())
         {
             auto v             = std::make_unique<flowAnalysis::Atom>();
             v->name            = item.value().at("name").get<std::string>();
             v->state           = item.value().at("state").get<flowAnalysis::ExciteState>();
             v->exciteStateName = item.value().at("exciteStateName").get<std::string>();
-            v->D               = item.value().at("D").get<double>();
+            v->D               = flowAnalysis::sstod(item.value().at("D").get<std::string>());
             p.atom[v->name]    = std::move(*v);
         }
         for (const auto& item : j.at("ion").items())
@@ -45,7 +42,7 @@ struct adl_serializer<flowAnalysis::particle_manager>
             auto v         = std::make_unique<flowAnalysis::Ion>();
             v->name        = item.value().at("name").get<std::string>();
             v->polarity    = item.value().at("polarity").get<int>();
-            v->D           = item.value().at("D").get<double>();
+            v->D           = flowAnalysis::sstod(item.value().at("D").get<std::string>());
             p.ion[v->name] = std::move(*v);
         }
         for (const auto& item : j.at("molecule").items())
@@ -55,7 +52,7 @@ struct adl_serializer<flowAnalysis::particle_manager>
             v->state            = item.value().at("state").get<flowAnalysis::ExciteState>();
             v->exciteStateName  = item.value().at("exciteStateName").get<std::string>();
             v->polarity         = item.value().at("polarity").get<int>();
-            v->D                = item.value().at("D").get<double>();
+            v->D                = flowAnalysis::sstod(item.value().at("D").get<std::string>());
             p.molecule[v->name] = std::move(*v);
         }
     }
