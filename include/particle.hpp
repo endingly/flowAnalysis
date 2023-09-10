@@ -17,7 +17,7 @@ class Atom
 {
   public:
     std::string name;
-    ExciteState state; // 激发状态，常规原子是 groud
+    ExciteState state;           // 激发状态，常规原子是 groud
     std::string exciteStateName; // 激发状态
     double      D;               // 扩散系数
     Matrix      N;
@@ -30,8 +30,7 @@ class Atom
     Matrix H1x, H1y;
     Matrix LPx, LPy;
 
-    Atom(std::string name, ExciteState state,
-         std::string exciteStateName);
+    Atom(std::string name, ExciteState state, std::string exciteStateName);
     Atom();
 
     bool operator==(const Atom& other) const noexcept;
@@ -93,8 +92,7 @@ class Molecule
     Matrix H1x, H1y;
     Matrix LPx, LPy;
 
-    Molecule(std::string name, int polarity, ExciteState state,
-             std::string exciteStateName);
+    Molecule(std::string name, int polarity, ExciteState state, std::string exciteStateName);
     Molecule();
     ~Molecule();
 
@@ -117,11 +115,10 @@ struct adl_serializer<flowAnalysis::Atom>
 {
     static void from_json(const json& j, flowAnalysis::Atom& p)
     {
-        p.name  = j.at("name").get<std::string>();
-        p.state = j.at("state").get<flowAnalysis::ExciteState>();
-        p.exciteStateName =
-            j.at("exciteStateName").get<std::string>();
-        p.D = flowAnalysis::sstod(j.at("D").get<std::string>());
+        p.name            = j.at("name").get<std::string>();
+        p.state           = j.at("state").get<flowAnalysis::ExciteState>();
+        p.exciteStateName = j.at("exciteStateName").get<std::string>();
+        p.D               = flowAnalysis::sstod(j.at("D").get<std::string>());
     }
 
     static void to_json(json& j, const flowAnalysis::Atom& p)
@@ -140,14 +137,13 @@ struct adl_serializer<flowAnalysis::Ion>
     {
         p.name     = j.at("name").get<std::string>();
         p.polarity = j.at("polarity").get<int>();
-        p.D = flowAnalysis::sstod(j.at("D").get<std::string>());
+        p.D        = flowAnalysis::sstod(j.at("D").get<std::string>());
     }
 
     static void to_json(json& j, const flowAnalysis::Ion& p)
     {
-        j = nlohmann::json{{"name", p.name},
-                           {"polarity", p.polarity},
-                           {"D", fmt::format("{0:.2e}", p.D)}};
+        j = nlohmann::json{
+            {"name", p.name}, {"polarity", p.polarity}, {"D", fmt::format("{0:.2e}", p.D)}};
     }
 };
 
@@ -156,12 +152,11 @@ struct adl_serializer<flowAnalysis::Molecule>
 {
     static void from_json(const json& j, flowAnalysis::Molecule& p)
     {
-        p.name     = j.at("name").get<std::string>();
-        p.polarity = j.at("polarity").get<int>();
-        p.state    = j.at("state").get<flowAnalysis::ExciteState>();
-        p.exciteStateName =
-            j.at("exciteStateName").get<std::string>();
-        p.D = flowAnalysis::sstod(j.at("D").get<std::string>());
+        p.name            = j.at("name").get<std::string>();
+        p.polarity        = j.at("polarity").get<int>();
+        p.state           = j.at("state").get<flowAnalysis::ExciteState>();
+        p.exciteStateName = j.at("exciteStateName").get<std::string>();
+        p.D               = flowAnalysis::sstod(j.at("D").get<std::string>());
     }
 
     static void to_json(json& j, const flowAnalysis::Molecule& p)

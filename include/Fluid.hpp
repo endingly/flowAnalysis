@@ -19,7 +19,8 @@ class fluid
     Matrix           Kte;       // 电子温度
     Matrix           phi;       // 电势 # Math: \phi
     Matrix           Ener;      // 能量
-    particle_manager pm;        // 粒子管理器
+    Matrix           Zex, Zey;  // 为求粒子流密度时指数上的间接指数 # Math: a=(\mu E h / D)
+    particle_manager pm; // 粒子管理器
   public:
     fluid();
     ~fluid();

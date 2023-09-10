@@ -22,16 +22,14 @@
 #define FLOW_ANALYSIS_F_CO_2 1
 
 // 初始条件设定
-#define FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY                       \
+#define FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY                                                     \
     FLOW_ANALYSIS_PRESSURE * 133.3 * 1e-6 / (1.38 * 1e-23 * 300)
-
-
 
 namespace flowAnalysis
 {
 
-using Matrix  = Eigen::Matrix<double, FLOW_ANALYSIS_IMAX,
-                             FLOW_ANALYSIS_JMAX, Eigen::ColMajor>;
+using Matrix  = Eigen::Matrix<double, FLOW_ANALYSIS_IMAX, FLOW_ANALYSIS_JMAX>;
+using Array   = Eigen::ArrayWrapper<Matrix>;
 using RVector = Eigen::Vector<double, FLOW_ANALYSIS_JMAX>;
 using CVector = Eigen::Vector<double, FLOW_ANALYSIS_IMAX>;
 

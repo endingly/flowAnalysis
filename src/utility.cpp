@@ -1,23 +1,18 @@
 #include "utility.hpp"
 #include "common_define.hpp"
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 bool isOperator(char c)
 {
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
-bool isOperator(std::string c)
+bool isOperator(const std::string& c)
 {
     return c == "+" || c == "-" || c == "*" || c == "/";
 }
 
 // 分割数学表达式字符串
-std::vector<std::string> splitExpression(
-    const std::string& expression)
+std::vector<std::string> splitExpression(const std::string& expression)
 {
     std::vector<std::string> tokens;
     int                      currentIndex = 0;
@@ -44,18 +39,15 @@ std::vector<std::string> splitExpression(
         if (i == lastOperatorIndex)
         {
             // 最后一个运算符，直接分割
-            tokens.push_back(expression.substr(currentIndex + 1,
-                                               i - currentIndex - 1));
+            tokens.push_back(expression.substr(currentIndex + 1, i - currentIndex - 1));
             tokens.push_back(expression.substr(i, 1));
-            tokens.push_back(expression.substr(
-                i + 1, expression.length() - i - 1));
+            tokens.push_back(expression.substr(i + 1, expression.length() - i - 1));
             return tokens;
         }
 
         // 遇到运算符就分割
         // 运算符前面的字符串
-        tokens.push_back(expression.substr(currentIndex + fix,
-                                           i - currentIndex - fix));
+        tokens.push_back(expression.substr(currentIndex + fix, i - currentIndex - fix));
         // 以及运算符本身
         tokens.push_back(expression.substr(i, 1));
         currentIndex = i;
@@ -84,9 +76,13 @@ double flowAnalysis::sstod(const std::string& str)
             // 先看有没有 MN
             double temp;
             if (tokens[i] == "MN")
+            {
                 temp = FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY;
+            }
             else
+            {
                 temp = std::atof(tokens[i].c_str());
+            }
             if (first)
             {
                 result = temp;

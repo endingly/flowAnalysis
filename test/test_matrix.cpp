@@ -1,22 +1,18 @@
-#include <Eigen/Core>
+#include "common_define.hpp"
 #include <gtest/gtest.h>
 
-using Matrix = Eigen::Matrix<double, 3, 3, Eigen::ColMajor>;
 
-auto operator+(const Matrix& m, const double& n)
-{
-    return m.array() + n;
-}
-
-auto operator+(const double& n, const Matrix& m)
-{
-    return n + m.array();
-}
+using namespace flowAnalysis;
 
 TEST(matrix, custom_operator)
 {
-    Matrix m = Matrix::Random();
-    double n = 2;
+    Eigen::Matrix3d m;
+    Eigen::Matrix3d n;
+    m << 1, 2, 3, 4, 5, 6, 7, 8, 9;
+    n << 1, 2, 3, 4, 5, 6, 7, 8, 9;
     std::cout << "m:\n" << m << "\n\n";
-    std::cout << "m * 2:\n" << 2 * m << "\n\n";
+    std::cout << "n:\n" << n << "\n\n";
+    std::cout << "m + n:\n" << m + n << "\n\n";
+    std::cout << "m * n:\n" << m * n << "\n\n";
+    std::cout << "m.array()*n.array():\n" << m.array() * n.array() << "\n\n";
 }
