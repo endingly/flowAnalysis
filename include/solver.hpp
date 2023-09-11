@@ -1,6 +1,5 @@
 #pragma once
 #include "fluid.hpp"
-#include "eigen_matrix_extension.hpp"
 
 namespace flowAnalysis
 {
