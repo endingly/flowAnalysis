@@ -11,6 +11,6 @@
     "cuda",
     "nlohmann-json",
     "glog",
-    "muparser"
+    "benchmark"
   ]
 }

@@ -9,6 +9,7 @@ target_link_libraries(
     paraller_computing
     glog::glog
 )
+target_compile_options(${PROJECT_NAME} PUBLIC -openmp)
 
 file(GLOB_RECURSE TEST_SOURCES "*.cpp")
 add_executable(${PROJECT_NAME}_test ${TEST_SOURCES})

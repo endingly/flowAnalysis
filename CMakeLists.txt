@@ -10,7 +10,7 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
 endif()
 
-option(ENBALE_STACK_TRACE "enable stack trace" ON)
+option(ENBALE_STACK_TRACE "enable stack trace" OFF)
 option(ENABLE_TEST "enable test" ON)
 
 # package settings
@@ -19,7 +19,6 @@ find_package(GTest CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(glog CONFIG REQUIRED)
-find_package(muparser CONFIG REQUIRED)
 if(ENBALE_STACK_TRACE)
     find_package(Backward CONFIG REQUIRED)
 endif()
@@ -39,6 +38,7 @@ target_link_libraries(
     paraller_computing
     glog::glog
 )
+target_compile_options(${PROJECT_NAME} PUBLIC -openmp)
 
 add_subdirectory(sub_extension/parallel_computing)
 
@@ -48,4 +48,5 @@ endif()
 
 if(ENABLE_TEST)
     add_subdirectory(test)
+    add_subdirectory(benchmark)
 endif()
