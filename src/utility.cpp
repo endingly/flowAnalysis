@@ -60,6 +60,7 @@ std::vector<std::string> splitExpression(const std::string& expression)
     return tokens;
 }
 
+//[ ]: 数学表达式解析错误，待 fix 
 double flowAnalysis::sstod(const std::string& str)
 {
     if (!(str.find('*') || str.find('/')))

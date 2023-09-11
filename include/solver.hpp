@@ -31,6 +31,8 @@ class solver
     void init_particle_u_D();
     /// @brief 初始化用于计算粒子流密度间接矩阵，在 init_MigrationAndDiffusion 中调用
     void init_Zx();
+    /// @brief 初始化每种粒子的三种系数，在 solve_poisson_equation 中调用
+    void init_GHL_matrix();
 
   public:
     static Matrix& H1(const Matrix& Z);

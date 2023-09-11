@@ -197,3 +197,20 @@ Matrix& solver::H1(const Matrix& Z)
 
     return result;
 }
+
+///[ ]: 初始化系数矩阵待完成
+void solver::init_GHL_matrix()
+{
+
+    for (auto& item : f->pm.ion)
+    {
+        auto i = item.second;
+        i.G1x  = G1(i.Zx);
+        i.G1y  = G1(i.Zy);
+        i.G2x  = i.G1x.array() + 1;
+        i.G2y  = i.G1y.array() + 1;
+        i.H1x  = H1(i.Zx);
+        i.H1y  = H1(i.Zy);
+        i.LPx  = i.G1x.array() * i.H1x.array();
+    }
+}
