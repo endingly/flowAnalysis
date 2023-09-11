@@ -1,5 +1,6 @@
 #pragma once
 #include <Eigen/Core>
+#include <Eigen/src/Core/util/Constants.h>
 
 namespace flowAnalysis
 {
@@ -18,7 +19,7 @@ constexpr float  f_He                     = 0;
 constexpr float  f_CO_2                   = 1;
 constexpr double init_midparticle_density = pressure * 133.3 * 1e-6 / (1.38 * 1e-23 * 300);
 
-using Matrix  = Eigen::Matrix<double, imax, jmax>;
+using Matrix  = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
 using Array   = Eigen::ArrayWrapper<Matrix>;
 using RVector = Eigen::Vector<double, jmax>;
 using CVector = Eigen::Vector<double, imax>;

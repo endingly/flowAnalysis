@@ -1,4 +1,5 @@
 #include "particle.hpp"
+#include "common_define.hpp"
 #include <string>
 #include <utility>
 
@@ -12,48 +13,47 @@ Atom::Atom()
     this->exciteStateName = "";
     this->D               = 0;
 
-    this->N  = Matrix::Zero();
-    this->Dx = Matrix::Zero();
-    this->Dy = Matrix::Zero();
-    this->Zx = Matrix::Zero();
-    this->Zy = Matrix::Zero();
-    this->Jx = Matrix::Zero();
-    this->Jy = Matrix::Zero();
+    this->N  = Matrix::Zero(imax, jmax);
+    this->Dx = Matrix::Zero(imax, jmax);
+    this->Dy = Matrix::Zero(imax, jmax);
+    this->Zx = Matrix::Zero(imax, jmax);
+    this->Zy = Matrix::Zero(imax, jmax);
+    this->Jx = Matrix::Zero(imax, jmax);
+    this->Jy = Matrix::Zero(imax, jmax);
 
-    this->G1x = Matrix::Zero();
-    this->G1y = Matrix::Zero();
-    this->G2x = Matrix::Zero();
-    this->G2y = Matrix::Zero();
-    this->H1x = Matrix::Zero();
-    this->H1y = Matrix::Zero();
-    this->LPx = Matrix::Zero();
-    this->LPy = Matrix::Zero();
+    this->G1x = Matrix::Zero(imax, jmax);
+    this->G1y = Matrix::Zero(imax, jmax);
+    this->G2x = Matrix::Zero(imax, jmax);
+    this->G2y = Matrix::Zero(imax, jmax);
+    this->H1x = Matrix::Zero(imax, jmax);
+    this->H1y = Matrix::Zero(imax, jmax);
+    this->LPx = Matrix::Zero(imax, jmax);
+    this->LPy = Matrix::Zero(imax, jmax);
 }
 
-Atom::Atom(std::string name, ExciteState state,
-           std::string exciteStateName)
+Atom::Atom(std::string name, ExciteState state, std::string exciteStateName)
 {
     this->name            = std::move(name);
     this->state           = state;
     this->exciteStateName = std::move(exciteStateName);
     this->D               = 0;
 
-    this->N  = Matrix::Zero();
-    this->Dx = Matrix::Zero();
-    this->Dy = Matrix::Zero();
-    this->Zx = Matrix::Zero();
-    this->Zy = Matrix::Zero();
-    this->Jx = Matrix::Zero();
-    this->Jy = Matrix::Zero();
+    this->N  = Matrix::Zero(imax, jmax);
+    this->Dx = Matrix::Zero(imax, jmax);
+    this->Dy = Matrix::Zero(imax, jmax);
+    this->Zx = Matrix::Zero(imax, jmax);
+    this->Zy = Matrix::Zero(imax, jmax);
+    this->Jx = Matrix::Zero(imax, jmax);
+    this->Jy = Matrix::Zero(imax, jmax);
 
-    this->G1x = Matrix::Zero();
-    this->G1y = Matrix::Zero();
-    this->G2x = Matrix::Zero();
-    this->G2y = Matrix::Zero();
-    this->H1x = Matrix::Zero();
-    this->H1y = Matrix::Zero();
-    this->LPx = Matrix::Zero();
-    this->LPy = Matrix::Zero();
+    this->G1x = Matrix::Zero(imax, jmax);
+    this->G1y = Matrix::Zero(imax, jmax);
+    this->G2x = Matrix::Zero(imax, jmax);
+    this->G2y = Matrix::Zero(imax, jmax);
+    this->H1x = Matrix::Zero(imax, jmax);
+    this->H1y = Matrix::Zero(imax, jmax);
+    this->LPx = Matrix::Zero(imax, jmax);
+    this->LPy = Matrix::Zero(imax, jmax);
 }
 
 Atom::~Atom() = default;
@@ -174,26 +174,26 @@ Ion::Ion()
     this->polarity = 0;
     this->D        = 0;
 
-    this->ux  = Matrix::Zero();
-    this->uy  = Matrix::Zero();
-    this->Jx  = Matrix::Zero();
-    this->Jy  = Matrix::Zero();
-    this->Dx  = Matrix::Zero();
-    this->Dy  = Matrix::Zero();
-    this->Zx  = Matrix::Zero();
-    this->Zy  = Matrix::Zero();
-    this->Jdx = Matrix::Zero();
-    this->Jdy = Matrix::Zero();
-    this->N   = Matrix::Zero();
+    this->ux  = Matrix::Zero(imax, jmax);
+    this->uy  = Matrix::Zero(imax, jmax);
+    this->Jx  = Matrix::Zero(imax, jmax);
+    this->Jy  = Matrix::Zero(imax, jmax);
+    this->Dx  = Matrix::Zero(imax, jmax);
+    this->Dy  = Matrix::Zero(imax, jmax);
+    this->Zx  = Matrix::Zero(imax, jmax);
+    this->Zy  = Matrix::Zero(imax, jmax);
+    this->Jdx = Matrix::Zero(imax, jmax);
+    this->Jdy = Matrix::Zero(imax, jmax);
+    this->N   = Matrix::Zero(imax, jmax);
 
-    this->G1x = Matrix::Zero();
-    this->G1y = Matrix::Zero();
-    this->G2x = Matrix::Zero();
-    this->G2y = Matrix::Zero();
-    this->H1x = Matrix::Zero();
-    this->H1y = Matrix::Zero();
-    this->LPx = Matrix::Zero();
-    this->LPy = Matrix::Zero();
+    this->G1x = Matrix::Zero(imax, jmax);
+    this->G1y = Matrix::Zero(imax, jmax);
+    this->G2x = Matrix::Zero(imax, jmax);
+    this->G2y = Matrix::Zero(imax, jmax);
+    this->H1x = Matrix::Zero(imax, jmax);
+    this->H1y = Matrix::Zero(imax, jmax);
+    this->LPx = Matrix::Zero(imax, jmax);
+    this->LPy = Matrix::Zero(imax, jmax);
 }
 
 Ion::Ion(string name, int polarity)
@@ -202,26 +202,26 @@ Ion::Ion(string name, int polarity)
     this->polarity = polarity;
     this->D        = 0;
 
-    this->ux  = Matrix::Zero();
-    this->uy  = Matrix::Zero();
-    this->Jx  = Matrix::Zero();
-    this->Jy  = Matrix::Zero();
-    this->Dx  = Matrix::Zero();
-    this->Dy  = Matrix::Zero();
-    this->Zx  = Matrix::Zero();
-    this->Zy  = Matrix::Zero();
-    this->Jdx = Matrix::Zero();
-    this->Jdy = Matrix::Zero();
-    this->N   = Matrix::Zero();
+    this->ux  = Matrix::Zero(imax, jmax);
+    this->uy  = Matrix::Zero(imax, jmax);
+    this->Jx  = Matrix::Zero(imax, jmax);
+    this->Jy  = Matrix::Zero(imax, jmax);
+    this->Dx  = Matrix::Zero(imax, jmax);
+    this->Dy  = Matrix::Zero(imax, jmax);
+    this->Zx  = Matrix::Zero(imax, jmax);
+    this->Zy  = Matrix::Zero(imax, jmax);
+    this->Jdx = Matrix::Zero(imax, jmax);
+    this->Jdy = Matrix::Zero(imax, jmax);
+    this->N   = Matrix::Zero(imax, jmax);
 
-    this->G1x = Matrix::Zero();
-    this->G1y = Matrix::Zero();
-    this->G2x = Matrix::Zero();
-    this->G2y = Matrix::Zero();
-    this->H1x = Matrix::Zero();
-    this->H1y = Matrix::Zero();
-    this->LPx = Matrix::Zero();
-    this->LPy = Matrix::Zero();
+    this->G1x = Matrix::Zero(imax, jmax);
+    this->G1y = Matrix::Zero(imax, jmax);
+    this->G2x = Matrix::Zero(imax, jmax);
+    this->G2y = Matrix::Zero(imax, jmax);
+    this->H1x = Matrix::Zero(imax, jmax);
+    this->H1y = Matrix::Zero(imax, jmax);
+    this->LPx = Matrix::Zero(imax, jmax);
+    this->LPy = Matrix::Zero(imax, jmax);
 }
 
 Ion::~Ion() = default;
@@ -357,30 +357,29 @@ Molecule::Molecule()
     this->exciteStateName = "";
     this->D               = 0;
 
-    this->ux  = Matrix::Zero();
-    this->uy  = Matrix::Zero();
-    this->Jx  = Matrix::Zero();
-    this->Jy  = Matrix::Zero();
-    this->Dx  = Matrix::Zero();
-    this->Dy  = Matrix::Zero();
-    this->Zx  = Matrix::Zero();
-    this->Zy  = Matrix::Zero();
-    this->Jdx = Matrix::Zero();
-    this->Jdy = Matrix::Zero();
-    this->N   = Matrix::Zero();
+    this->ux  = Matrix::Zero(imax, jmax);
+    this->uy  = Matrix::Zero(imax, jmax);
+    this->Jx  = Matrix::Zero(imax, jmax);
+    this->Jy  = Matrix::Zero(imax, jmax);
+    this->Dx  = Matrix::Zero(imax, jmax);
+    this->Dy  = Matrix::Zero(imax, jmax);
+    this->Zx  = Matrix::Zero(imax, jmax);
+    this->Zy  = Matrix::Zero(imax, jmax);
+    this->Jdx = Matrix::Zero(imax, jmax);
+    this->Jdy = Matrix::Zero(imax, jmax);
+    this->N   = Matrix::Zero(imax, jmax);
 
-    this->G1x = Matrix::Zero();
-    this->G1y = Matrix::Zero();
-    this->G2x = Matrix::Zero();
-    this->G2y = Matrix::Zero();
-    this->H1x = Matrix::Zero();
-    this->H1y = Matrix::Zero();
-    this->LPx = Matrix::Zero();
-    this->LPy = Matrix::Zero();
+    this->G1x = Matrix::Zero(imax, jmax);
+    this->G1y = Matrix::Zero(imax, jmax);
+    this->G2x = Matrix::Zero(imax, jmax);
+    this->G2y = Matrix::Zero(imax, jmax);
+    this->H1x = Matrix::Zero(imax, jmax);
+    this->H1y = Matrix::Zero(imax, jmax);
+    this->LPx = Matrix::Zero(imax, jmax);
+    this->LPy = Matrix::Zero(imax, jmax);
 }
 
-Molecule::Molecule(string name, int polarity, ExciteState state,
-                   string exciteStateName)
+Molecule::Molecule(string name, int polarity, ExciteState state, string exciteStateName)
 {
     this->name            = std::move(name);
     this->polarity        = polarity;
@@ -388,26 +387,26 @@ Molecule::Molecule(string name, int polarity, ExciteState state,
     this->exciteStateName = std::move(exciteStateName);
     this->D               = 0;
 
-    this->ux  = Matrix::Zero();
-    this->uy  = Matrix::Zero();
-    this->Jx  = Matrix::Zero();
-    this->Jy  = Matrix::Zero();
-    this->Dx  = Matrix::Zero();
-    this->Dy  = Matrix::Zero();
-    this->Zx  = Matrix::Zero();
-    this->Zy  = Matrix::Zero();
-    this->Jdx = Matrix::Zero();
-    this->Jdy = Matrix::Zero();
-    this->N   = Matrix::Zero();
+    this->ux  = Matrix::Zero(imax, jmax);
+    this->uy  = Matrix::Zero(imax, jmax);
+    this->Jx  = Matrix::Zero(imax, jmax);
+    this->Jy  = Matrix::Zero(imax, jmax);
+    this->Dx  = Matrix::Zero(imax, jmax);
+    this->Dy  = Matrix::Zero(imax, jmax);
+    this->Zx  = Matrix::Zero(imax, jmax);
+    this->Zy  = Matrix::Zero(imax, jmax);
+    this->Jdx = Matrix::Zero(imax, jmax);
+    this->Jdy = Matrix::Zero(imax, jmax);
+    this->N   = Matrix::Zero(imax, jmax);
 
-    this->G1x = Matrix::Zero();
-    this->G1y = Matrix::Zero();
-    this->G2x = Matrix::Zero();
-    this->G2y = Matrix::Zero();
-    this->H1x = Matrix::Zero();
-    this->H1y = Matrix::Zero();
-    this->LPx = Matrix::Zero();
-    this->LPy = Matrix::Zero();
+    this->G1x = Matrix::Zero(imax, jmax);
+    this->G1y = Matrix::Zero(imax, jmax);
+    this->G2x = Matrix::Zero(imax, jmax);
+    this->G2y = Matrix::Zero(imax, jmax);
+    this->H1x = Matrix::Zero(imax, jmax);
+    this->H1y = Matrix::Zero(imax, jmax);
+    this->LPx = Matrix::Zero(imax, jmax);
+    this->LPy = Matrix::Zero(imax, jmax);
 }
 
 Molecule::~Molecule() = default;

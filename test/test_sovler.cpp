@@ -8,7 +8,7 @@ TEST(solver, init)
 {
     // flowAnalysis::solver s;
     // s.solve_poisson_equation();
-    Matrix m = Matrix::Random();
+    Matrix m = Matrix::Random(imax, jmax);
     auto   a = solver::G1(m);
     std::cout << a << "\n";
 }

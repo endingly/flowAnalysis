@@ -77,7 +77,7 @@ double flowAnalysis::sstod(const std::string& str)
             double temp;
             if (tokens[i] == "MN")
             {
-                temp = FLOW_ANALYSIS_INIT_MIDPARTICLE_DENSITY;
+                temp = init_midparticle_density;
             }
             else
             {
