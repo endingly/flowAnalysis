@@ -1,5 +1,5 @@
 #include "solver.hpp"
-#include "common_define.hpp"
+#include "eigen_matrix_extension.hpp"
 #include <memory>
 #include <utility>
 
@@ -36,6 +36,7 @@ void solver::solve_poisson_equation()
     constexpr double epsilon = 8.84E-14 * 1.00056; // 介电常数
 
     // 对于每种粒子的 Z 而言都需要分段讨论
+    init_GHL_matrix();
 }
 
 void solver::init_uex()
@@ -198,10 +199,20 @@ Matrix& solver::H1(const Matrix& Z)
     return result;
 }
 
-///[ ]: 初始化系数矩阵待完成
+///[x]: 初始化系数矩阵待完成
 void solver::init_GHL_matrix()
 {
+    // 电子
+    f->G1ex = G1(f->Zex);
+    f->G1ey = G1(f->Zey);
+    f->G2ex = f->G1ex.array() + 1;
+    f->G2ey   = f->G1ey.array() + 1;
+    f->H1ex   = H1(f->Zex);
+    f->H1ey   = H1(f->Zey);
+    f->LPex   = f->Dex.array() * f->H1ex.array() * Get_space_step_x(f->Zex).array();
+    f->LPey   = f->Dey.array() * f->H1ey.array() * Get_space_step_y(f->Zey).array();
 
+    // 离子
     for (auto& item : f->pm.ion)
     {
         auto i = item.second;
@@ -211,6 +222,20 @@ void solver::init_GHL_matrix()
         i.G2y  = i.G1y.array() + 1;
         i.H1x  = H1(i.Zx);
         i.H1y  = H1(i.Zy);
-        i.LPx  = i.G1x.array() * i.H1x.array();
+        i.LPx  = i.Dx.array() * i.H1x.array() * Get_space_step_x(i.Zx).array();
+        i.LPy  = i.Dy.array() * i.H1y.array() * Get_space_step_y(i.Zy).array();
+    }
+    // 分子
+    for (auto& item : f->pm.molecule)
+    {
+        auto i = item.second;
+        i.G1x  = G1(i.Zx);
+        i.G1y  = G1(i.Zy);
+        i.G2x  = i.G1x.array() + 1;
+        i.G2y  = i.G1y.array() + 1;
+        i.H1x  = H1(i.Zx);
+        i.H1y  = H1(i.Zy);
+        i.LPx  = i.Dx.array() * i.H1x.array() * Get_space_step_x(i.Zx).array();
+        i.LPy  = i.Dy.array() * i.H1y.array() * Get_space_step_y(i.Zy).array();
     }
 }

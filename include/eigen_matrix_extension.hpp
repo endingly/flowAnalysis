@@ -4,7 +4,7 @@
 namespace flowAnalysis
 {
 
-template <class ArgType>
+template <typename ArgType>
 class space_step_functor_x
 {
     const ArgType& m_arg;
@@ -30,7 +30,8 @@ class space_step_functor_x
     }
 };
 
-template <class ArgType>
+/// @brief Get the space step in x direction
+template <typename ArgType>
 Eigen::CwiseNullaryOp<space_step_functor_x<ArgType>,
                       typename space_step_functor_x<ArgType>::MatrixType>
 Get_space_step_x(const Eigen::MatrixBase<ArgType>& arg)
@@ -40,7 +41,7 @@ Get_space_step_x(const Eigen::MatrixBase<ArgType>& arg)
     return MatrixType::NullaryExpr(arg.rows(), arg.cols(), Func(arg.derived()));
 }
 
-template <class ArgType>
+template <typename ArgType>
 class space_step_functor_y
 {
     const ArgType& m_arg;
@@ -66,7 +67,8 @@ class space_step_functor_y
     }
 };
 
-template <class ArgType>
+/// @brief Get the space step in y direction
+template <typename ArgType>
 Eigen::CwiseNullaryOp<space_step_functor_y<ArgType>,
                       typename space_step_functor_y<ArgType>::MatrixType>
 Get_space_step_y(const Eigen::MatrixBase<ArgType>& arg)
