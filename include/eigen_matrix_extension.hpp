@@ -4,40 +4,76 @@
 namespace flowAnalysis
 {
 
-template <typename T>
-concept Numeric = std::is_arithmetic_v<T>;
-
-template <typename Arg>
-concept EigenMatrix = requires(Arg arg) {
-    std::is_arithmetic_v<typename Arg::Scalar>&& Arg::RowSizeAtCompileTime != 1 &&
-        Arg::ColSizeAtCompileTime != 1 &&
-        std::is_same_v<std::decay_t<Arg>, Eigen::MatrixBase<typename Arg::Scalar>>;
-};
-
-template <EigenMatrix T>
-class circulant_functor
+template <class ArgType>
+class space_step_functor_x
 {
-    const T& s;
+    const ArgType& m_arg;
 
   public:
-    circulant_functor(const T& arg) : s(arg)
+    using MatrixType =
+        Eigen::Matrix<typename ArgType::Scalar, ArgType::SizeAtCompileTime,
+                      ArgType::SizeAtCompileTime,
+                      ArgType::Flags & Eigen::RowMajorBit ? Eigen::RowMajor : Eigen::ColMajor,
+                      ArgType::MaxSizeAtCompileTime, ArgType::MaxSizeAtCompileTime>;
+
+    space_step_functor_x(const ArgType& arg) : m_arg(arg)
     {
     }
 
-    const typename T::Scalar& operator()(Eigen::Index row, Eigen::Index col) const
+    const typename ArgType::Scalar& operator()(Eigen::Index row, Eigen::Index col) const
     {
-        if (row == T::RowSizeAtCompileTime)
+        if (row == m_arg.rows() - 1)
         {
             return 0;
         }
-        return s(row, col + 1) - s(row, col);
+        return m_arg(row, col + 1) - m_arg(row, col);
     }
 };
 
-template <EigenMatrix T>
-Eigen::CwiseNullaryOp<circulant_functor<T>, T> makeCirculant(const Eigen::MatrixBase<T>& arg)
+template <class ArgType>
+Eigen::CwiseNullaryOp<space_step_functor_x<ArgType>,
+                      typename space_step_functor_x<ArgType>::MatrixType>
+Get_space_step_x(const Eigen::MatrixBase<ArgType>& arg)
 {
-    return T::NullaryExpr(arg.size(), arg.size(), circulant_functor<T>(arg.derived()));
+    using Func       = space_step_functor_x<ArgType>;
+    using MatrixType = typename Func::MatrixType;
+    return MatrixType::NullaryExpr(arg.rows(), arg.cols(), Func(arg.derived()));
 }
+
+template <class ArgType>
+class space_step_functor_y
+{
+    const ArgType& m_arg;
+
+  public:
+    using MatrixType =
+        Eigen::Matrix<typename ArgType::Scalar, ArgType::SizeAtCompileTime,
+                      ArgType::SizeAtCompileTime,
+                      ArgType::Flags & Eigen::RowMajorBit ? Eigen::RowMajor : Eigen::ColMajor,
+                      ArgType::MaxSizeAtCompileTime, ArgType::MaxSizeAtCompileTime>;
+
+    space_step_functor_y(const ArgType& arg) : m_arg(arg)
+    {
+    }
+
+    const typename ArgType::Scalar& operator()(Eigen::Index row, Eigen::Index col) const
+    {
+        if (col == m_arg.cols() - 1)
+        {
+            return 0;
+        }
+        return m_arg(row + 1, col) - m_arg(row, col);
+    }
+};
+
+template <class ArgType>
+Eigen::CwiseNullaryOp<space_step_functor_y<ArgType>,
+                      typename space_step_functor_y<ArgType>::MatrixType>
+Get_space_step_y(const Eigen::MatrixBase<ArgType>& arg)
+{
+    using Func       = space_step_functor_y<ArgType>;
+    using MatrixType = typename Func::MatrixType;
+    return MatrixType::NullaryExpr(arg.rows(), arg.cols(), Func(arg.derived()));
 }
-; // namespace flowAnalysis
+
+}; // namespace flowAnalysis
