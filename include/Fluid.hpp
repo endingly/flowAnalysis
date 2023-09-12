@@ -17,6 +17,7 @@ class fluid
     Matrix Jex, Jey;  // 电流密度
     Matrix uex, uey;  // 电子迁移系数
     Matrix Dex, Dey;  // 电子扩散系数
+    Matrix ne;        // 电子密度
     Matrix Kte;       // 电子温度
     Matrix phi;       // 电势 # Math: \phi
     Matrix Ener;      // 能量

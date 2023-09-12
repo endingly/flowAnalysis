@@ -1,5 +1,8 @@
 #pragma once
 #include "fluid.hpp"
+#include "particle.hpp"
+#include <string>
+#include <type_traits>
 
 namespace flowAnalysis
 {
@@ -7,8 +10,20 @@ namespace flowAnalysis
 class solver
 {
   private:
-    double dx, dy; // 空间步长
-    double dt;     // 时间步长
+    enum particelType
+    {
+        electron,
+        ion,
+        atom,
+        molecule
+    };
+
+    static constexpr double Qe      = 1.6E-19;            // 单位电荷量
+    static constexpr double epsilon = 8.84E-14 * 1.00056; // 介电常数
+    double                  dx, dy;                       // 空间步长
+
+    // 对应于流体的五点系数，多的一个不知道是什么，由于不属于流体自带的物理量，所以放在这里
+    Matrix AW, AN, AC, AE, AS, AR;
 
     std::unique_ptr<fluid> f;
 
@@ -33,10 +48,20 @@ class solver
     void init_Zx();
     /// @brief 初始化每种粒子的三种系数，在 solve_poisson_equation 中调用
     void init_GHL_matrix();
+    /// @brief 初始化 AW, AN, AC, AE, AS, AR 矩阵，在 solve_poisson_equation 中调用
+    void init_AWENCSR_matrix();
 
   public:
     static Matrix& H1(const Matrix& Z);
     static Matrix& G1(const Matrix& Z);
+
+  private:
+    /// @brief 表达式定义，用于求解 AW, AN, AC, AE, AS, AR 矩阵中的一项
+    using Expr = decltype(f->uex.array() *
+                          (f->G1ex.array() * f->ne.array() - f->G2ex.array() * f->ne.array()));
+    /// @brief 求解 AW, AN, AC, AE, AS, AR 矩阵中的一项，子函数
+    Expr make_AWENCSR_matrix_subfunction(solver::particelType kind,
+                                         const std::string&   particel_name);
 };
 
 } // namespace flowAnalysis

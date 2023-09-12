@@ -1,5 +1,6 @@
 #pragma once
 #include "common_define.hpp"
+#include <string>
 #include <vector>
 
 namespace flowAnalysis

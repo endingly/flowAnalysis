@@ -1,5 +1,7 @@
 #include "solver.hpp"
+#include "common_define.hpp"
 #include "eigen_matrix_extension.hpp"
+#include "particle.hpp"
 #include <memory>
 #include <utility>
 
@@ -14,7 +16,15 @@ solver::solver()
 {
     dx = double(imax) / (double(imax) - 1);
     dy = double(jmax) / (double(jmax) - 1);
-    f  = std::make_unique<fluid>();
+
+    AW = Matrix::Zero(imax, jmax);
+    AN = Matrix::Zero(imax, jmax);
+    AC = Matrix::Zero(imax, jmax);
+    AE = Matrix::Zero(imax, jmax);
+    AS = Matrix::Zero(imax, jmax);
+    AR = Matrix::Zero(imax, jmax);
+
+    f = std::make_unique<fluid>();
 
     init_MigrationAndDiffusion();
 }
@@ -32,8 +42,6 @@ void solver::init_MigrationAndDiffusion()
 void solver::solve_poisson_equation()
 {
     // # Math: \Delta \Phi=-\frac{\rho}{\epsilon_{0}}
-    constexpr double Qe      = 1.6E-19;            // 单位电荷量
-    constexpr double epsilon = 8.84E-14 * 1.00056; // 介电常数
 
     // 对于每种粒子的 Z 而言都需要分段讨论
     init_GHL_matrix();
@@ -206,11 +214,11 @@ void solver::init_GHL_matrix()
     f->G1ex = G1(f->Zex);
     f->G1ey = G1(f->Zey);
     f->G2ex = f->G1ex.array() + 1;
-    f->G2ey   = f->G1ey.array() + 1;
-    f->H1ex   = H1(f->Zex);
-    f->H1ey   = H1(f->Zey);
-    f->LPex   = f->Dex.array() * f->H1ex.array() * Get_space_step_x(f->Zex).array();
-    f->LPey   = f->Dey.array() * f->H1ey.array() * Get_space_step_y(f->Zey).array();
+    f->G2ey = f->G1ey.array() + 1;
+    f->H1ex = H1(f->Zex);
+    f->H1ey = H1(f->Zey);
+    f->LPex = f->Dex.array() * f->H1ex.array() * Get_space_step_x(f->Zex).array();
+    f->LPey = f->Dey.array() * f->H1ey.array() * Get_space_step_y(f->Zey).array();
 
     // 离子
     for (auto& item : f->pm.ion)
@@ -237,5 +245,57 @@ void solver::init_GHL_matrix()
         i.H1y  = H1(i.Zy);
         i.LPx  = i.Dx.array() * i.H1x.array() * Get_space_step_x(i.Zx).array();
         i.LPy  = i.Dy.array() * i.H1y.array() * Get_space_step_y(i.Zy).array();
+    }
+}
+
+///[ ]: 初始化系数矩阵待完成
+void solver::init_AWENCSR_matrix()
+{
+
+    // 电子以及各粒子的 G1 G2 矩阵以及 u 共同组成了 AE 矩阵
+    // clang-format off
+    // AE=epsilon*dy/dx-dy*dt/dx*Qe*(upxOfu(i,j)*(g1pOfux(i,j)*npOfu(i+1,j)-g2pOfux(i,j)*npOfu(i,j))+
+    //                                upxO2(i,j)*(g1pO2x(i,j)*npO2(i+1,j)-g2pO2x(i,j)*npO2(i,j))+
+    //                              upxO2fu(i,j)*(g1pO2fux(i,j)*npO2fu(i+1,j)-g2pO2fux(i,j)*npO2fu(i,j))+
+    //                             upxCO3fu(i,j)*(g1pCO3fux(i,j)*npCO3fu(i+1,j)-g2pCO3fux(i,j)*npCO3fu(i,j))+
+    //                               upxCO2(i,j)*(g1pCO2x(i,j)*npCO2(i+1,j)-g2pCO2x(i,j)*npCO2(i,j))+
+    //                                  uex(i,j)*(g1ex(i,j)*ne(i+1,j)-g2ex(i,j)*ne(i,j)));
+    AE = epsilon * dy / dx - dy * dt / dx * Qe * make_AWENCSR_matrix_subfunction(ion, "O-")
+                                               * make_AWENCSR_matrix_subfunction(molecule, "O2")
+                                               * make_AWENCSR_matrix_subfunction(molecule, "O2-")
+                                               * make_AWENCSR_matrix_subfunction(molecule, "CO3-")
+                                               * make_AWENCSR_matrix_subfunction(molecule, "CO2")
+                                               * make_AWENCSR_matrix_subfunction(electron, "e");
+    // clang-format on
+}
+
+solver::Expr solver::make_AWENCSR_matrix_subfunction(solver::particelType kind,
+                                                     const std::string&   particel_name)
+{
+    if (kind == electron)
+    {
+        auto uex  = f->uex.array();
+        auto G1ex = f->G1ex.array();
+        auto G2ex = f->G2ex.array();
+        auto ne   = f->ne.array();
+        return uex * (G1ex * ne - G2ex * ne);
+    }
+    else if (kind == ion)
+    {
+        auto ion = f->pm.ion;
+        auto u   = ion[particel_name].ux.array();
+        auto G1  = ion[particel_name].G1x.array();
+        auto G2  = ion[particel_name].G2x.array();
+        auto n   = ion[particel_name].N.array();
+        return u * (G1 * n - G2 * n);
+    }
+    else
+    {
+        auto molecule = f->pm.molecule;
+        auto u        = molecule[particel_name].ux.array();
+        auto G1       = molecule[particel_name].G1x.array();
+        auto G2       = molecule[particel_name].G2x.array();
+        auto n        = molecule[particel_name].N.array();
+        return u * (G1 * n - G2 * n);
     }
 }
