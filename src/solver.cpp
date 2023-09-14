@@ -253,19 +253,18 @@ void solver::init_AWENCSR_matrix()
 {
     // 电子以及各粒子的 G1 G2 矩阵以及 u 共同组成了 AE 矩阵
     // clang-format off
-    AE = epsilon * dy / dx - dy * dt / dx * Qe * make_AWENCSR_matrix_subfunction(ion, "O-")
-                                               * make_AWENCSR_matrix_subfunction(molecule, "O2")
-                                               * make_AWENCSR_matrix_subfunction(molecule, "O2-")
-                                               * make_AWENCSR_matrix_subfunction(molecule, "CO3-")
-                                               * make_AWENCSR_matrix_subfunction(molecule, "CO2")
-                                               * make_AWENCSR_matrix_subfunction(electron, "e");
+    AE = epsilon * dy / dx - dy * dt / dx * Qe * make_AWENCSR_matrix_subfunction("O-")
+                                               * make_AWENCSR_matrix_subfunction("O2")
+                                               * make_AWENCSR_matrix_subfunction("O2-")
+                                               * make_AWENCSR_matrix_subfunction("CO3-")
+                                               * make_AWENCSR_matrix_subfunction("CO2")
+                                               * make_AWENCSR_matrix_subfunction("e");
     // clang-format on
 }
 
-solver::Expr solver::make_AWENCSR_matrix_subfunction(flowAnalysis::particelType kind,
-                                                     const std::string&   particel_name)
+solver::Expr solver::make_AWENCSR_matrix_subfunction(const std::string& particel_name)
 {
-    if (kind == electron)
+    if (get_particle_type(particel_name) == electron)
     {
         auto uex  = f->uex.array();
         auto G1ex = f->G1ex.array();
@@ -273,7 +272,7 @@ solver::Expr solver::make_AWENCSR_matrix_subfunction(flowAnalysis::particelType 
         auto ne   = f->ne.array();
         return uex * (G1ex * ne - G2ex * ne);
     }
-    else if (kind == ion)
+    else if (get_particle_type(particel_name) == ion)
     {
         auto ion = f->pm.ion;
         auto u   = ion[particel_name].ux.array();

@@ -1,6 +1,4 @@
 #include "utility.hpp"
-#include "common_define.hpp"
-#include <cstdlib>
 
 bool isOperator(char c)
 {
@@ -113,4 +111,74 @@ double flowAnalysis::sstod(const std::string& str)
         }
     }
     return result;
+}
+
+flowAnalysis::char_type get_char_type(const char& c)
+{
+    using namespace flowAnalysis;
+    if (c == ' ')
+    {
+        return space;
+    }
+    else if (c >= '0' && c <= '9')
+    {
+        return number;
+    }
+    else if ((c >= 'a' && c <= 'z'))
+    {
+        return low_letter;
+    }
+    else if ((c >= 'A' && c <= 'Z'))
+    {
+        return up_letter;
+    }
+    else
+    {
+        return symbol;
+    }
+}
+
+bool has_symbol(const std::string& str)
+{
+    for (int i = 0; i < str.length(); i++)
+    {
+        if (get_char_type(str[i]) == flowAnalysis::symbol)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool has_two_up_letter(const std::string& str)
+{
+    int count = 0;
+    for (int i = 0; i < str.length(); i++)
+    {
+        if (get_char_type(str[i]) == flowAnalysis::up_letter)
+        {
+            count++;
+        }
+    }
+    return count == 2;
+}
+
+flowAnalysis::particelType flowAnalysis::get_particle_type(const std::string& str)
+{
+    if (str == "e")
+    {
+        return electron;
+    }
+    if (has_two_up_letter(str))
+    {
+        return molecule;
+    }
+    else if (has_symbol(str))
+    {
+        return ion;
+    }
+    else
+    {
+        return atom;
+    }
 }

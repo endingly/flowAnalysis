@@ -1,7 +1,6 @@
 #pragma once
 #include "common_define.hpp"
 #include <string>
-#include <vector>
 
 namespace flowAnalysis
 {
@@ -11,7 +10,8 @@ enum char_type
 {
     space,
     number,
-    letter,
+    low_letter,
+    up_letter,
     symbol
 };
 
@@ -20,6 +20,9 @@ enum char_type
 /// @return
 double sstod(const std::string& str);
 
-char_type get_char_type(const char& c);
+/// @brief 获取字符串中是否含有符号
+/// @param str 字符串
+/// @return 符号类型
+particelType get_particle_type(const std::string& str);
 
 }; // namespace flowAnalysis

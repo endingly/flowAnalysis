@@ -5,13 +5,6 @@
 
 namespace flowAnalysis
 {
-enum particelType
-{
-    electron,
-    ion,
-    atom,
-    molecule
-};
 
 class solver
 {
@@ -58,8 +51,7 @@ class solver
     using Expr = decltype(f->uex.array() *
                           (f->G1ex.array() * f->ne.array() - f->G2ex.array() * f->ne.array()));
     /// @brief 求解 AW, AN, AC, AE, AS, AR 矩阵中的一项，子函数
-    Expr make_AWENCSR_matrix_subfunction(flowAnalysis::particelType kind,
-                                         const std::string&   particel_name);
+    Expr make_AWENCSR_matrix_subfunction(const std::string& particel_name);
 };
 
 } // namespace flowAnalysis

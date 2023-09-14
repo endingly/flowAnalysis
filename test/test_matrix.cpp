@@ -2,10 +2,11 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-// [x]: test EigenMatrix concept
+// [ ]: warning: unused parameter ‘row’ [-Wunused-parameter]
 TEST(matrix, test_matrix_extension)
 {
-    Eigen::MatrixXi A = Eigen::MatrixXi::Random(4, 4);
+    Eigen::Matrix<int, 3, 3> A;
+    A << 1, 2, 3, 4, 5, 6, 7, 8, 9;
     Eigen::MatrixXi B = flowAnalysis::Get_space_step_x(A);
     Eigen::MatrixXi C = flowAnalysis::Get_space_step_y(A);
     std::cout << "A =" << std::endl;
