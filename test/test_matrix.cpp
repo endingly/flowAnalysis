@@ -1,5 +1,4 @@
 #include "eigen_matrix_extension.hpp"
-#include <Eigen/src/Core/Matrix.h>
 #include <gtest/gtest.h>
 #include <iostream>
 

@@ -2,22 +2,20 @@
 #include "fluid.hpp"
 #include "particle.hpp"
 #include <string>
-#include <type_traits>
 
 namespace flowAnalysis
 {
+enum particelType
+{
+    electron,
+    ion,
+    atom,
+    molecule
+};
 
 class solver
 {
   private:
-    enum particelType
-    {
-        electron,
-        ion,
-        atom,
-        molecule
-    };
-
     static constexpr double Qe      = 1.6E-19;            // 单位电荷量
     static constexpr double epsilon = 8.84E-14 * 1.00056; // 介电常数
     double                  dx, dy;                       // 空间步长
@@ -60,7 +58,7 @@ class solver
     using Expr = decltype(f->uex.array() *
                           (f->G1ex.array() * f->ne.array() - f->G2ex.array() * f->ne.array()));
     /// @brief 求解 AW, AN, AC, AE, AS, AR 矩阵中的一项，子函数
-    Expr make_AWENCSR_matrix_subfunction(solver::particelType kind,
+    Expr make_AWENCSR_matrix_subfunction(flowAnalysis::particelType kind,
                                          const std::string&   particel_name);
 };
 

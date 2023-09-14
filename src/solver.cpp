@@ -251,15 +251,8 @@ void solver::init_GHL_matrix()
 ///[ ]: 初始化系数矩阵待完成
 void solver::init_AWENCSR_matrix()
 {
-
     // 电子以及各粒子的 G1 G2 矩阵以及 u 共同组成了 AE 矩阵
     // clang-format off
-    // AE=epsilon*dy/dx-dy*dt/dx*Qe*(upxOfu(i,j)*(g1pOfux(i,j)*npOfu(i+1,j)-g2pOfux(i,j)*npOfu(i,j))+
-    //                                upxO2(i,j)*(g1pO2x(i,j)*npO2(i+1,j)-g2pO2x(i,j)*npO2(i,j))+
-    //                              upxO2fu(i,j)*(g1pO2fux(i,j)*npO2fu(i+1,j)-g2pO2fux(i,j)*npO2fu(i,j))+
-    //                             upxCO3fu(i,j)*(g1pCO3fux(i,j)*npCO3fu(i+1,j)-g2pCO3fux(i,j)*npCO3fu(i,j))+
-    //                               upxCO2(i,j)*(g1pCO2x(i,j)*npCO2(i+1,j)-g2pCO2x(i,j)*npCO2(i,j))+
-    //                                  uex(i,j)*(g1ex(i,j)*ne(i+1,j)-g2ex(i,j)*ne(i,j)));
     AE = epsilon * dy / dx - dy * dt / dx * Qe * make_AWENCSR_matrix_subfunction(ion, "O-")
                                                * make_AWENCSR_matrix_subfunction(molecule, "O2")
                                                * make_AWENCSR_matrix_subfunction(molecule, "O2-")
@@ -269,7 +262,7 @@ void solver::init_AWENCSR_matrix()
     // clang-format on
 }
 
-solver::Expr solver::make_AWENCSR_matrix_subfunction(solver::particelType kind,
+solver::Expr solver::make_AWENCSR_matrix_subfunction(flowAnalysis::particelType kind,
                                                      const std::string&   particel_name)
 {
     if (kind == electron)
