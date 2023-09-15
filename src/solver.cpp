@@ -2,8 +2,7 @@
 #include "common_define.hpp"
 #include "eigen_matrix_extension.hpp"
 #include "particle.hpp"
-#include <memory>
-#include <utility>
+#include <iostream>
 
 using namespace flowAnalysis;
 
@@ -27,6 +26,9 @@ solver::solver()
     f = std::make_unique<fluid>();
 
     init_MigrationAndDiffusion();
+    // 对于每种粒子的 Z 而言都需要分段讨论
+    init_GHL_matrix();
+    init_AWENCSR_matrix();
 }
 
 solver::~solver() = default;
@@ -42,9 +44,6 @@ void solver::init_MigrationAndDiffusion()
 void solver::solve_poisson_equation()
 {
     // # Math: \Delta \Phi=-\frac{\rho}{\epsilon_{0}}
-
-    // 对于每种粒子的 Z 而言都需要分段讨论
-    init_GHL_matrix();
 }
 
 void solver::init_uex()
@@ -172,12 +171,12 @@ void solver::init_Zx()
     ZxCO2   = uxCO2 / DxCO2 * Ex * dx;
 }
 
-Matrix& solver::G1(const Matrix& Z)
+Matrix solver::G1(const Matrix& Z)
 {
     constexpr double z1     = -60.0;
     constexpr double z2     = 1.0e-5;
     constexpr double z3     = 60.0;
-    Matrix           result = Matrix::Zero(imax, jmax);
+    Matrix           result = Matrix::Zero(Z.rows(), Z.rows());
     auto             r      = result.array();
 
     auto z = Z.array();
@@ -187,15 +186,15 @@ Matrix& solver::G1(const Matrix& Z)
     r = (z.abs() >= z2 && z.abs() < z3)
             .select((z.exp() * (1 - z) - 1.0) / (z.exp() - 1.0).pow(2), z);
 
-    return result;
+    return std::move(result);
 }
 
-Matrix& solver::H1(const Matrix& Z)
+Matrix solver::H1(const Matrix& Z)
 {
     constexpr double z1     = -60.0;
     constexpr double z2     = 1.0e-5;
     constexpr double z3     = 60.0;
-    Matrix           result = Matrix::Zero(imax, jmax);
+    Matrix           result = Matrix::Zero(Z.rows(), Z.rows());
     auto             r      = result.array();
 
     auto z = Z.array();
@@ -204,7 +203,7 @@ Matrix& solver::H1(const Matrix& Z)
     r = (z.abs() >= z1 && z.abs() < z2).select(z.exp() / (1 + z / 2).pow(2), z);
     r = (z.abs() >= z2 && z.abs() < z3).select((z.exp() * z.pow(2)) / (z.exp() - 1.0).pow(2), z);
 
-    return result;
+    return std::move(result);
 }
 
 ///[x]: 初始化系数矩阵待完成
@@ -248,6 +247,41 @@ void solver::init_GHL_matrix()
     }
 }
 
+auto solver::make_AWENCSR_matrix_subfunction(const std::string& particel_name)
+{
+    if (get_particle_type(particel_name) == electron)
+    {
+        auto uex  = f->uex.array();
+        auto G1ex = f->G1ex.array();
+        auto G2ex = f->G2ex.array();
+        auto ne   = f->ne.array();
+        auto ne_1 = Get_move_matrix_x(f->ne).array();
+        return uex * (G1ex * ne_1 - G2ex * ne);
+    }
+    else if (get_particle_type(particel_name) == ion)
+    {
+        auto ion = f->pm.ion;
+        auto u   = ion[particel_name].ux.array();
+        auto G1  = ion[particel_name].G1x.array();
+        auto G2  = ion[particel_name].G2x.array();
+        auto n   = ion[particel_name].N.array();
+        auto n_1 = Get_move_matrix_x(ion[particel_name].N).array();
+        auto r   = u * (G1 * n_1 - G2 * n);
+        std::cout << r << "\n\n";
+        return r;
+    }
+    else
+    {
+        auto molecule = f->pm.molecule;
+        auto u        = molecule[particel_name].ux.array();
+        auto G1       = molecule[particel_name].G1x.array();
+        auto G2       = molecule[particel_name].G2x.array();
+        auto n        = molecule[particel_name].N.array();
+        auto n_1      = Get_move_matrix_x(molecule[particel_name].N).array();
+        return u * (G1 * n_1 - G2 * n);
+    }
+}
+
 ///[ ]: 初始化系数矩阵待完成
 void solver::init_AWENCSR_matrix()
 {
@@ -260,34 +294,5 @@ void solver::init_AWENCSR_matrix()
                                                * make_AWENCSR_matrix_subfunction("CO2")
                                                * make_AWENCSR_matrix_subfunction("e");
     // clang-format on
-}
-
-solver::Expr solver::make_AWENCSR_matrix_subfunction(const std::string& particel_name)
-{
-    if (get_particle_type(particel_name) == electron)
-    {
-        auto uex  = f->uex.array();
-        auto G1ex = f->G1ex.array();
-        auto G2ex = f->G2ex.array();
-        auto ne   = f->ne.array();
-        return uex * (G1ex * ne - G2ex * ne);
-    }
-    else if (get_particle_type(particel_name) == ion)
-    {
-        auto ion = f->pm.ion;
-        auto u   = ion[particel_name].ux.array();
-        auto G1  = ion[particel_name].G1x.array();
-        auto G2  = ion[particel_name].G2x.array();
-        auto n   = ion[particel_name].N.array();
-        return u * (G1 * n - G2 * n);
-    }
-    else
-    {
-        auto molecule = f->pm.molecule;
-        auto u        = molecule[particel_name].ux.array();
-        auto G1       = molecule[particel_name].G1x.array();
-        auto G2       = molecule[particel_name].G2x.array();
-        auto n        = molecule[particel_name].N.array();
-        return u * (G1 * n - G2 * n);
-    }
+    std::cout << "AE=\n" << AE << "\n\n";
 }

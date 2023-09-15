@@ -43,15 +43,12 @@ class solver
     void init_AWENCSR_matrix();
 
   public:
-    static Matrix& H1(const Matrix& Z);
-    static Matrix& G1(const Matrix& Z);
+    static Matrix H1(const Matrix& Z);
+    static Matrix G1(const Matrix& Z);
 
   private:
-    /// @brief 表达式定义，用于求解 AW, AN, AC, AE, AS, AR 矩阵中的一项
-    using Expr = decltype(f->uex.array() *
-                          (f->G1ex.array() * f->ne.array() - f->G2ex.array() * f->ne.array()));
     /// @brief 求解 AW, AN, AC, AE, AS, AR 矩阵中的一项，子函数
-    Expr make_AWENCSR_matrix_subfunction(const std::string& particel_name);
+    auto make_AWENCSR_matrix_subfunction(const std::string& particel_name);
 };
 
 } // namespace flowAnalysis

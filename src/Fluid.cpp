@@ -48,6 +48,15 @@ flowAnalysis::fluid::fluid()
     Zex  = Matrix::Zero(imax, jmax);
     Zey  = Matrix::Zero(imax, jmax);
 
+    G1ex = Matrix::Zero(imax, jmax);
+    G1ey = Matrix::Zero(imax, jmax);
+    G2ex = Matrix::Zero(imax, jmax);
+    G2ey = Matrix::Zero(imax, jmax);
+    H1ex = Matrix::Zero(imax, jmax);
+    H1ey = Matrix::Zero(imax, jmax);
+    LPex = Matrix::Zero(imax, jmax);
+    LPey = Matrix::Zero(imax, jmax);
+
     fs::path       p = fs::current_path() / "particle.json";
     std::ifstream  f(p.string().c_str());
     nlohmann::json j;
